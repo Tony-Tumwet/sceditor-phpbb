@@ -48,24 +48,21 @@ class bbcodedata extends \phpbb\db\migration\migration
         $sqsl = 'DELETE FROM ' . $this->table_prefix . 'bbcodes WHERE ' . $this->db->sql_in_set('bbcode_tag', $bbcodedata);
         $this->db->sql_query($sqsl);
 
-        $sql = 'SELECT bbcode_id
-    				FROM ' . $this->table_prefix . 'bbcodes
-    				 ORDER BY bbcode_id DESC LIMIT 1'
-    				 ;
-    		$result = $this->db->sql_query($sql);
-    		while ($styles_row = $this->db->sql_fetchrow())
-    		{
-    				$style_ids = $styles_row['bbcode_id'];
-    			
-    		}
-    		$this->db->sql_freeresult($result);
-        if (!isset($style_ids)) { 
-            $style_ids = '0';
-    	}
+        $sql = 'SELECT MAX(bbcode_id) AS max_id
+    				FROM ' . $this->table_prefix . 'bbcodes';
+        $result = $this->db->sql_query($sql);
+
+        $style_ids = 0;
+        if ($styles_row = $this->db->sql_fetchrow())
+        {
+                $style_ids = $styles_row['max_id'];
+
+        }
+        $this->db->sql_freeresult($result);
 
         $phpbb_bbcodes = array(
         	array( // row #1
-        		'bbcode_id' => $style_ids + 1,
+        		'bbcode_id' => ++$style_ids,
         		'bbcode_tag' => 'li',
         		'bbcode_helpline' => '',
         		'display_on_posting' => 0,
@@ -77,7 +74,7 @@ class bbcodedata extends \phpbb\db\migration\migration
         		'second_pass_replace' => '<li>${1}</li>',
         	),
         	array( // row #2
-        		'bbcode_id' => $style_ids + 2,
+        		'bbcode_id' => ++$style_ids,
         		'bbcode_tag' => 'ul',
         		'bbcode_helpline' => '',
         		'display_on_posting' => 0,
@@ -89,7 +86,7 @@ class bbcodedata extends \phpbb\db\migration\migration
         		'second_pass_replace' => '<ul>${1}</ul>',
         	),
         	array( // row #3
-        		'bbcode_id' => $style_ids + 3,
+        		'bbcode_id' => ++$style_ids,
         		'bbcode_tag' => 's',
         		'bbcode_helpline' => '',
         		'display_on_posting' => 0,
@@ -101,31 +98,31 @@ class bbcodedata extends \phpbb\db\migration\migration
         		'second_pass_replace' => '<strike>${1}</strike>',
         	),
         	array( // row #4
-        		'bbcode_id' => $style_ids + 4,
+        		'bbcode_id' => ++$style_ids,
         		'bbcode_tag' => 'sub',
         		'bbcode_helpline' => '',
         		'display_on_posting' => 0,
         		'bbcode_match' => '[sub]{TEXT}[/sub]',
-        		'bbcode_tpl' => '<style>\nsub {\n    vertical-align: sub;\n    font-size: smaller;\n} \n</style>\n<sub>{TEXT}</sub>',
+        		'bbcode_tpl' => '<style>sub { vertical-align: sub;  font-size: smaller;}</style><sub>{TEXT}</sub>',
         		'first_pass_match' => '!\\[sub\\](.*?)\\[/sub\\]!ies',
         		'first_pass_replace' => '\'[sub:$uid]\'.str_replace(array("\\r\\n", \'\\"\', \'\\\'\', \'(\', \')\'), array("\\n", \'"\', \'&#39;\', \'&#40;\', \'&#41;\'), trim(\'${1}\')).\'[/sub:$uid]\'',
         		'second_pass_match' => '!\\[sub:$uid\\](.*?)\\[/sub:$uid\\]!s',
         		'second_pass_replace' => '<style>\nsub {\n    vertical-align: sub;\n    font-size: smaller;\n} \n</style>\n<sub>${1}</sub>',
         	),
         	array( // row #5
-        		'bbcode_id' => $style_ids + 5,
+        		'bbcode_id' => ++$style_ids,
         		'bbcode_tag' => 'sup',
         		'bbcode_helpline' => '',
         		'display_on_posting' => 0,
         		'bbcode_match' => '[sup]{TEXT}[/sup]',
-        		'bbcode_tpl' => '<style>\nsup {\n    vertical-align: super;\n    font-size: smaller;\n} \n</style>\n<sup>{TEXT}</sup>',
+        		'bbcode_tpl' => '<style>sup { vertical-align: super;  font-size: smaller;}</style><sup>{TEXT}</sup>',
         		'first_pass_match' => '!\\[sup\\](.*?)\\[/sup\\]!ies',
         		'first_pass_replace' => '\'[sup:$uid]\'.str_replace(array("\\r\\n", \'\\"\', \'\\\'\', \'(\', \')\'), array("\\n", \'"\', \'&#39;\', \'&#40;\', \'&#41;\'), trim(\'${1}\')).\'[/sup:$uid]\'',
         		'second_pass_match' => '!\\[sup:$uid\\](.*?)\\[/sup:$uid\\]!s',
         		'second_pass_replace' => '<style>\nsup {\n    vertical-align: super;\n    font-size: smaller;\n} \n</style>\n<sup>${1}</sup>',
         	),
         	array( // row #6
-        		'bbcode_id' => $style_ids + 6,
+        		'bbcode_id' => ++$style_ids,
         		'bbcode_tag' => 'left',
         		'bbcode_helpline' => '',
         		'display_on_posting' => 0,
@@ -137,7 +134,7 @@ class bbcodedata extends \phpbb\db\migration\migration
         		'second_pass_replace' => '<div align="left">${1}</div>',
         	),
         	array( // row #7
-        		'bbcode_id' => $style_ids + 7,
+        		'bbcode_id' => ++$style_ids,
         		'bbcode_tag' => 'right',
         		'bbcode_helpline' => '',
         		'display_on_posting' => 0,
@@ -149,7 +146,7 @@ class bbcodedata extends \phpbb\db\migration\migration
         		'second_pass_replace' => '<div align="right">${1}</div>',
         	),
         	array( // row #8
-        		'bbcode_id' => $style_ids + 8,
+        		'bbcode_id' => ++$style_ids,
         		'bbcode_tag' => 'center',
         		'bbcode_helpline' => '',
         		'display_on_posting' => 0,
@@ -161,7 +158,7 @@ class bbcodedata extends \phpbb\db\migration\migration
         		'second_pass_replace' => '<div align="center">${1}</div>',
         	),
         	array( // row #9
-        		'bbcode_id' => $style_ids + 9,
+        		'bbcode_id' => ++$style_ids,
         		'bbcode_tag' => 'justify',
         		'bbcode_helpline' => '',
         		'display_on_posting' => 0,
@@ -173,7 +170,7 @@ class bbcodedata extends \phpbb\db\migration\migration
         		'second_pass_replace' => '<div align="justify">${1}</div>',
         	),
         	array( // row #10
-        		'bbcode_id' => $style_ids + 10,
+        		'bbcode_id' => ++$style_ids,
         		'bbcode_tag' => 'font=',
         		'bbcode_helpline' => '',
         		'display_on_posting' => 0,
@@ -185,7 +182,7 @@ class bbcodedata extends \phpbb\db\migration\migration
         		'second_pass_replace' => '<font face="${1}">${2}</font>',
         	),
         	array( // row #11
-        		'bbcode_id' => $style_ids + 11,
+        		'bbcode_id' => ++$style_ids,
         		'bbcode_tag' => 'ol',
         		'bbcode_helpline' => '',
         		'display_on_posting' => 0,
@@ -197,31 +194,31 @@ class bbcodedata extends \phpbb\db\migration\migration
         		'second_pass_replace' => '<ol>${1}</ol>',
         	),
         	array( // row #12
-        		'bbcode_id' => $style_ids + 12,
+        		'bbcode_id' => ++$style_ids,
         		'bbcode_tag' => 'table',
         		'bbcode_helpline' => '',
         		'display_on_posting' => 0,
         		'bbcode_match' => '[table]{TEXT}[/table]',
-        		'bbcode_tpl' => '<table>\n<tbody>\n{TEXT}\n</tbody>\n</table>',
+        		'bbcode_tpl' => '<table><tbody>{TEXT}</tbody></table>',
         		'first_pass_match' => '!\\[table\\](.*?)\\[/table\\]!ies',
         		'first_pass_replace' => '\'[table:$uid]\'.str_replace(array("\\r\\n", \'\\"\', \'\\\'\', \'(\', \')\'), array("\\n", \'"\', \'&#39;\', \'&#40;\', \'&#41;\'), trim(\'${1}\')).\'[/table:$uid]\'',
         		'second_pass_match' => '!\\[table:$uid\\](.*?)\\[/table:$uid\\]!s',
         		'second_pass_replace' => '<table>\n<tbody>\n${1}\n</tbody>\n</table>',
         	),
         	array( // row #13
-        		'bbcode_id' => $style_ids + 13,
+        		'bbcode_id' => ++$style_ids,
         		'bbcode_tag' => 'td',
         		'bbcode_helpline' => '',
         		'display_on_posting' => 0,
         		'bbcode_match' => '[td]{TEXT}[/td]',
-        		'bbcode_tpl' => '<style>\ntd {border: 1px dotted #000;}\n</style>\n<td>{TEXT}</td>',
+        		'bbcode_tpl' => '<style>td {border: 1px dotted #000;}</style><td>{TEXT}</td>',
         		'first_pass_match' => '!\\[td\\](.*?)\\[/td\\]!ies',
         		'first_pass_replace' => '\'[td:$uid]\'.str_replace(array("\\r\\n", \'\\"\', \'\\\'\', \'(\', \')\'), array("\\n", \'"\', \'&#39;\', \'&#40;\', \'&#41;\'), trim(\'${1}\')).\'[/td:$uid]\'',
         		'second_pass_match' => '!\\[td:$uid\\](.*?)\\[/td:$uid\\]!s',
         		'second_pass_replace' => '<style>\ntd {border: 1px dotted #000;}\n</style>\n<td>${1}</td>',
         	),
         	array( // row #14
-        		'bbcode_id' => $style_ids + 14,
+        		'bbcode_id' => ++$style_ids,
         		'bbcode_tag' => 'tr',
         		'bbcode_helpline' => '',
         		'display_on_posting' => 0,
@@ -233,7 +230,7 @@ class bbcodedata extends \phpbb\db\migration\migration
         		'second_pass_replace' => '<tr>${1}</tr>',
         	),
         	array( // row #15
-        		'bbcode_id' => $style_ids + 15,
+        		'bbcode_id' => ++$style_ids,
         		'bbcode_tag' => 'hr',
         		'bbcode_helpline' => '',
         		'display_on_posting' => 0,
@@ -245,7 +242,7 @@ class bbcodedata extends \phpbb\db\migration\migration
         		'second_pass_replace' => '',
         	),
         	array( // row #16
-        		'bbcode_id' => $style_ids + 16,
+        		'bbcode_id' => ++$style_ids,
         		'bbcode_tag' => 'youtube',
         		'bbcode_helpline' => '',
         		'display_on_posting' => 0,
@@ -257,7 +254,7 @@ class bbcodedata extends \phpbb\db\migration\migration
         		'second_pass_replace' => '<iframe width="560" height="315" src="http://www.youtube.com/embed/${1}?wmode=opaque" data-youtube-id="${1}" frameborder="0" allowfullscreen></iframe>',
         	),
         	array( // row #17
-        		'bbcode_id' => $style_ids + 17,
+        		'bbcode_id' => ++$style_ids,
         		'bbcode_tag' => 'rtl',
         		'bbcode_helpline' => '',
         		'display_on_posting' => 0,
@@ -269,7 +266,7 @@ class bbcodedata extends \phpbb\db\migration\migration
         		'second_pass_replace' => '<div style="direction: rtl;">${1}</div>',
         	),
         	array( // row #18
-        		'bbcode_id' => $style_ids + 18,
+        		'bbcode_id' => ++$style_ids,
         		'bbcode_tag' => 'ltr',
         		'bbcode_helpline' => '',
         		'display_on_posting' => 0,
@@ -283,11 +280,8 @@ class bbcodedata extends \phpbb\db\migration\migration
         );
     	foreach ($phpbb_bbcodes as $eee)
     	{
-
     		$sql = 'INSERT INTO ' . $this->table_prefix . 'bbcodes' . $this->db->sql_build_array('INSERT', $eee);
     		$this->db->sql_query($sql);
     	}
-
     }
-
 }

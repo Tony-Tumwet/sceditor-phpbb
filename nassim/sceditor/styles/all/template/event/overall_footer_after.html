@@ -1,3 +1,4 @@
+<!-- IF S_SCEDITOR -->
 <!-- INCLUDEJS @nassim_sceditor/js/jquery.sceditor.bbcode.min.js -->
 <script type="text/javascript">
 	$(function () {
@@ -5,9 +6,17 @@
 		// with SCEditor
 		$("textarea").sceditor({
 			plugins: "bbcode",
-			toolbarExclude: "emoticon"
+			toolbarExclude: "emoticon",
+			emoticonsRoot: "{U_EMOTICONS_ROOT}",
+			emoticons: {
+				dropdown: { <!-- BEGIN emoticons -->
+					"{emoticons.code}": "{emoticons.url}",
+					<!-- END emoticons -->
+				}
+			}
 		});
 		$('.sceditor-container:eq(0)').css('z-index', 0);
 	});
 </script>
 <!-- INCLUDEJS @nassim_sceditor/js/sce.js -->
+<!-- ENDIF -->

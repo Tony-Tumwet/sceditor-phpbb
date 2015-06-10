@@ -1,0 +1,11 @@
+services:
+    nassim.sceditor.event.sce:
+        class: nassim\sceditor\event\sce
+        arguments:
+            - @dbal.conn
+            - @template
+            - @config
+            - @user
+            - %core.root_path%
+        tags:
+            - { name: event.listener }

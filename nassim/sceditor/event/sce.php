@@ -51,7 +51,8 @@ class sce implements EventSubscriberInterface {
 
 		// We need to get all smilies with url and code
 		$sql = 'SELECT smiley_url, code
-			FROM ' . SMILIES_TABLE;
+			FROM ' . SMILIES_TABLE . '
+			GROUP BY smiley_url';
 		// Caching the smilies for 10 minutes should be okay
 		// they don't get changed so often
 		$result = $this->db->sql_query($sql, 600);

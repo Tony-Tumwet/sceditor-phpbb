@@ -78,20 +78,14 @@ $.sceditor.command.set('size', {
 	}
 });
 
-var textarea;
-// This is needed for the smilies popup
-function setSmilie(tag) {
-	textarea.data('sceditor').insert(' ' + tag + ' ');
-}
 
-$(function () {
-	// Don't need to select the node again and again
-	textarea = $('textarea');
-	// Hide the normal BBCode Buttons
+$(document).ready(function () {
 	$('#format-buttons').hide();
 	$('#smiley-box a img').each(function () {
+		$(this).css('cursor', 'pointer');
+
 		$(this).click(function () {
-			setSmilie($(this).attr('alt'));
+			$('textarea').data('sceditor').insert(' ' + $(this).attr('alt') + ' ');
 			return false;
 		});
 	});

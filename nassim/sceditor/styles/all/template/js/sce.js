@@ -1,6 +1,3 @@
-/***********************************************************
- * Update size tag to use xx-small-xx-large instead of 1-7 *
- ***********************************************************/
 var sizes = ['25', '50', '75', '100', '150', '175', '200'];
 $.sceditor.plugins.bbcode.bbcode.set('size', {
 	format: function ($elem, content) {
@@ -69,7 +66,7 @@ $.sceditor.command.set('size', {
 
 		for (var i = 1; i < 7; i++) {
 			// Only consider maxsize when set greater 0
-			if (check_maxsize && sizes[i-1] > max_fontsize) {
+			if (check_maxsize && sizes[i - 1] > max_fontsize) {
 				break;
 			}
 			content.append($('<a class="sceditor-fontsize-option" data-size="' + i + '" href="#"><font size="' + i + '">' + i + '</font></a>').click(clickFunc));
@@ -85,12 +82,57 @@ $.sceditor.command.set('size', {
 			caller,
 			function (sizesIdx) {
 				sizesIdx = ~~sizesIdx;
-				sizesIdx = (sizesIdx > 6) ? 6 : ( (sizesIdx < 0) ? 0 : sizesIdx );
+				if (sizesIdx > 6) {
+					sizesIdx = 6;
+				}
+				else if (sizesIdx < 0) {
+					sizesIdx = 0;
+				}
 
 				editor.insertText('[size=' + sizes[sizesIdx] + ']', '[/size]');
 			}
 		);
 	}
+});
+
+$.sceditor.plugins.bbcode.bbcode.set('quote', {
+	format: function (element, content) {
+		var author = '',
+			$element = $(element),
+			$cite = $element.children('cite').first();
+
+		if (1 === $cite.length || $element.data('author')) {
+			author = $element.data('author') || $cite.text().replace(/(^\s+|\s+$)/g, '').replace(/:$/, '');
+
+			$element.data('author', author);
+			$cite.remove();
+
+			content = this.elementToBbcode($element);
+			author = '=' + author;
+
+			$element.prepend($cite);
+		}
+
+		return '[quote' + author + ']' + content + '[/quote]';
+	},
+	html: function (token, attrs, content) {
+		var addition = '';
+
+		if ("undefined" !== typeof attrs.defaultattr) {
+			content = '<cite>' + attrs.defaultattr + ':</cite>' + content;
+			addition = 'data-author="' + attrs.defaultattr + '"';
+		}
+		else {
+			addition = ' class="uncited"'
+		}
+
+		return '<blockquote' + addition + '>' + content + '</blockquote>';
+	},
+	quoteType: function (val, name) {
+		return '"' + val.replace('"', '\\"') + '"';
+	},
+	breakStart: false,
+	breakEnd: false
 });
 
 var textarea;

@@ -27,7 +27,7 @@ class sce implements EventSubscriberInterface {
 
 	private $root_path;
 
-	private $css_file = 'default.min.css';
+	private $css_file = 'editarea.css';
 
 	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\template\template $template, \phpbb\config\config $config, \phpbb\user $user, $root_path) {
 		$this->template = $template;

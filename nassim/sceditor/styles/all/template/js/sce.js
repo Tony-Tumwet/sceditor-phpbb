@@ -67,6 +67,9 @@ $.sceditor.command.set('size', {
 			size;
 
 		for (var i = 1; i < 7; i++) {
+			if (sizes[i-1] > max_fontsize) {
+				break;
+			}
 			content.append($('<a class="sceditor-fontsize-option" data-size="' + i + '" href="#"><font size="' + i + '">' + i + '</font></a>').click(clickFunc));
 		}
 

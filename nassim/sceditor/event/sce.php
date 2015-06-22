@@ -46,6 +46,7 @@ class sce implements EventSubscriberInterface {
 	public function initialize_sceditor () {
 		// Activate the SCEditor
 		$this->template->assign_vars(array('S_SCEDITOR' => true,
+		                                   'MAX_FONTSIZE' => $this->config['max_post_font_size'],
 		                                   'U_EMOTICONS_ROOT' => $this->root_path . $this->config['smilies_path'] . '/',
 		                                   'U_CSS' => $this->root_path.'ext/nassim/sceditor/styles/all/template/js/themes/'.$this->css_file));
 

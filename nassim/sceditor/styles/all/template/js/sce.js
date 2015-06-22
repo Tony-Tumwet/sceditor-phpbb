@@ -1,4 +1,5 @@
-var sizes = ['25', '50', '75', '100', '150', '175', '200'];
+var sizes = ['25', '50', '75', '100', '150', '175', '200'],
+	textarea;
 $.sceditor.plugins.bbcode.bbcode.set('size', {
 	format: function ($elem, content) {
 		var fontSize,
@@ -120,7 +121,7 @@ $.sceditor.plugins.bbcode.bbcode.set('quote', {
 
 		if ("undefined" !== typeof attrs.defaultattr) {
 			content = '<cite>' + attrs.defaultattr + ':</cite>' + content;
-			addition = 'data-author="' + attrs.defaultattr + '"';
+			addition = ' data-author="' + attrs.defaultattr + '"';
 		}
 		else {
 			addition = ' class="uncited"'
@@ -135,7 +136,6 @@ $.sceditor.plugins.bbcode.bbcode.set('quote', {
 	breakEnd: false
 });
 
-var textarea;
 // This is needed for the smilies popup
 function setSmilie(tag) {
 	textarea.data('sceditor').insert(' ' + tag + ' ');

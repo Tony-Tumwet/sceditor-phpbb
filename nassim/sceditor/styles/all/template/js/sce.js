@@ -64,10 +64,12 @@ $.sceditor.command.set('size', {
 				editor.closeDropDown(true);
 				e.preventDefault();
 			},
-			size;
+			size,
+			check_maxsize = !!max_fontsize;
 
 		for (var i = 1; i < 7; i++) {
-			if (sizes[i-1] > max_fontsize) {
+			// Only consider maxsize when set greater 0
+			if (check_maxsize && sizes[i-1] > max_fontsize) {
 				break;
 			}
 			content.append($('<a class="sceditor-fontsize-option" data-size="' + i + '" href="#"><font size="' + i + '">' + i + '</font></a>').click(clickFunc));

@@ -17,7 +17,10 @@
 			},
 			style: '{U_CSS}?assets_version={T_ASSETS_VERSION}'
 		});
-		$('.sceditor-container:eq(0)').css('z-index', 0);
+
+		// Fix the position of the editor layer
+		$('.sceditor-container:eq(0)').css('z-index', 1);
+		$('#notification_list').css('z-index', 20);
 	});
 </script>
 <!-- INCLUDEJS @nassim_sceditor/js/sce.js -->

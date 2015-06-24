@@ -107,7 +107,7 @@ class bbcodedata extends \phpbb\db\migration\migration
         		'first_pass_match' => '!\\[sub\\](.*?)\\[/sub\\]!ies',
         		'first_pass_replace' => '\'[sub:$uid]\'.str_replace(array("\\r\\n", \'\\"\', \'\\\'\', \'(\', \')\'), array("\\n", \'"\', \'&#39;\', \'&#40;\', \'&#41;\'), trim(\'${1}\')).\'[/sub:$uid]\'',
         		'second_pass_match' => '!\\[sub:$uid\\](.*?)\\[/sub:$uid\\]!s',
-        		'second_pass_replace' => '<style>\nsub {\n    vertical-align: sub;\n    font-size: smaller;\n} \n</style>\n<sub>${1}</sub>',
+        		'second_pass_replace' => '<style>sub {vertical-align: sub; font-size: smaller;}</style><sub>${1}</sub>',
         	),
         	array( // row #5
         		'bbcode_id' => ++$style_ids,
@@ -119,7 +119,7 @@ class bbcodedata extends \phpbb\db\migration\migration
         		'first_pass_match' => '!\\[sup\\](.*?)\\[/sup\\]!ies',
         		'first_pass_replace' => '\'[sup:$uid]\'.str_replace(array("\\r\\n", \'\\"\', \'\\\'\', \'(\', \')\'), array("\\n", \'"\', \'&#39;\', \'&#40;\', \'&#41;\'), trim(\'${1}\')).\'[/sup:$uid]\'',
         		'second_pass_match' => '!\\[sup:$uid\\](.*?)\\[/sup:$uid\\]!s',
-        		'second_pass_replace' => '<style>\nsup {\n    vertical-align: super;\n    font-size: smaller;\n} \n</style>\n<sup>${1}</sup>',
+        		'second_pass_replace' => '<style>sup {vertical-align: super; font-size: smaller;}</style><sup>${1}</sup>',
         	),
         	array( // row #6
         		'bbcode_id' => ++$style_ids,
@@ -203,7 +203,7 @@ class bbcodedata extends \phpbb\db\migration\migration
         		'first_pass_match' => '!\\[table\\](.*?)\\[/table\\]!ies',
         		'first_pass_replace' => '\'[table:$uid]\'.str_replace(array("\\r\\n", \'\\"\', \'\\\'\', \'(\', \')\'), array("\\n", \'"\', \'&#39;\', \'&#40;\', \'&#41;\'), trim(\'${1}\')).\'[/table:$uid]\'',
         		'second_pass_match' => '!\\[table:$uid\\](.*?)\\[/table:$uid\\]!s',
-        		'second_pass_replace' => '<table>\n<tbody>\n${1}\n</tbody>\n</table>',
+        		'second_pass_replace' => '<table><tbody>${1}</tbody></table>',
         	),
         	array( // row #13
         		'bbcode_id' => ++$style_ids,
@@ -215,7 +215,7 @@ class bbcodedata extends \phpbb\db\migration\migration
         		'first_pass_match' => '!\\[td\\](.*?)\\[/td\\]!ies',
         		'first_pass_replace' => '\'[td:$uid]\'.str_replace(array("\\r\\n", \'\\"\', \'\\\'\', \'(\', \')\'), array("\\n", \'"\', \'&#39;\', \'&#40;\', \'&#41;\'), trim(\'${1}\')).\'[/td:$uid]\'',
         		'second_pass_match' => '!\\[td:$uid\\](.*?)\\[/td:$uid\\]!s',
-        		'second_pass_replace' => '<style>\ntd {border: 1px dotted #000;}\n</style>\n<td>${1}</td>',
+        		'second_pass_replace' => '<style>td {border: 1px dotted #000;}</style><td>${1}</td>',
         	),
         	array( // row #14
         		'bbcode_id' => ++$style_ids,

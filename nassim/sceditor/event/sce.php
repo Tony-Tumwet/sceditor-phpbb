@@ -39,7 +39,8 @@ class sce implements EventSubscriberInterface {
 
 	static public function getSubscribedEvents() {
 		return array(
-			'core.generate_smilies_after'  => 'initialize_sceditor'
+			'core.generate_smilies_after'  => 'initialize_sceditor',
+			'core.viewtopic_modify_page_title' => 'initialize_sceditor'
 		);
 	}
 

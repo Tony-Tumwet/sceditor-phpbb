@@ -7,7 +7,11 @@
 		// with SCEditor
 		$("textarea").sceditor({
 			plugins: "bbcode",
+			<!-- IF S_QUICK_REPLY -->
+			toolbar: "bold,italic,underline,strike|code,quote,removeformat|source",
+			<!-- ELSE -->
 			toolbarExclude: "emoticon",
+			<!-- ENDIF -->
 			emoticonsRoot: "{U_EMOTICONS_ROOT}",
 			emoticons: {
 				dropdown: { <!-- BEGIN emoticons -->

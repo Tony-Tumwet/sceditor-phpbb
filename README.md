@@ -2,4 +2,4 @@
 
 ###how to install
 
-copy folder nassim/ to phpbb 3.1 ext/ Folder
+copy folder cosmo/ to phpbb 3.1 ext/ Folder

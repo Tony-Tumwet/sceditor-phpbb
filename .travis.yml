@@ -48,7 +48,7 @@ before_install:
 
 install:
   - composer self-update
-  - cd cosmo/colorparser
+  - cd cosmo/sceditor
   - composer install --no-interaction --prefer-source
   - cd ../../
   - travis/prepare-phpbb.sh $EXTNAME $PHPBB_BRANCH

@@ -8,7 +8,7 @@
  */
 
 
-namespace nassim\sceditor\event;
+namespace cosmo\sceditor\event;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -49,7 +49,7 @@ class sce implements EventSubscriberInterface {
 		$this->template->assign_vars(array('S_SCEDITOR' => true,
 		                                   'MAX_FONTSIZE' => $this->config['max_post_font_size'],
 		                                   'U_EMOTICONS_ROOT' => $this->root_path . $this->config['smilies_path'] . '/',
-		                                   'U_CSS' => $this->root_path.'ext/nassim/sceditor/styles/all/template/js/themes/'.$this->css_file));
+		                                   'U_CSS' => $this->root_path.'ext/cosmo/sceditor/styles/all/template/js/themes/'.$this->css_file));
 
 		// We need to get all smilies with url and code
 		$sql = 'SELECT smiley_url, code

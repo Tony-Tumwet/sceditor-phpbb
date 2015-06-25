@@ -1,9 +1,9 @@
 {
-  "name": "nassim/sceditor",
+  "name": "cosmo/sceditor",
   "type": "phpbb-extension",
-  "description": "wysiwyg bbcode editor",
+  "description": "WYSIWYG BBCode Editor",
   "homepage": "https://github.com/cYbercOsmOnauT/wysiwygsceditorphpbb",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "time": "2015-03-28",
   "license": "GPL-2.0",
   "authors": [

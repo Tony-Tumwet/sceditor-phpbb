@@ -1,6 +1,11 @@
 services:
-    nassim.sceditor.event.sce:
-        class: nassim\sceditor\event\sce
+    cosmo.sceditor.event.parser:
+        class: cosmo\sceditor\event\parser
+        tags:
+            - { name: event.listener }
+
+    cosmo.sceditor.event.sce:
+        class: cosmo\sceditor\event\sce
         arguments:
             - @dbal.conn
             - @template

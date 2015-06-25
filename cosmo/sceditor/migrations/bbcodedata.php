@@ -7,7 +7,7 @@
 *
 */
 
-namespace nassim\sceditor\migrations;
+namespace cosmo\sceditor\migrations;
 
 class bbcodedata extends \phpbb\db\migration\migration
 {

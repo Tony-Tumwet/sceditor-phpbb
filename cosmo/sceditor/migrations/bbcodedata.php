@@ -28,22 +28,18 @@ class bbcodedata extends \phpbb\db\migration\migration
 
 	public function removebbcode()
 	{
-
-
 		$bbcodedata = array('li', 'ul', 's', 'sub', 'sup', 'left', 'right', 'center', 'justify', 'font=', 'ol', 'table', 'td', 'tr', 'hr', 'youtube', 'rtl', 'ltr',);
 
-		$sqsl = 'DELETE FROM ' . $this->table_prefix . 'bbcodes WHERE ' . $this->db->sql_in_set('bbcode_tag', $bbcodedata);
-		$this->db->sql_query($sqsl);
-
-
+		$sql = 'DELETE FROM ' . $this->table_prefix . 'bbcodes WHERE ' . $this->db->sql_in_set('bbcode_tag', $bbcodedata);
+		$this->db->sql_query($sql);
 	}
 
 	public function addbbcode()
 	{
 		$bbcodedata = array('li', 'ul', 's', 'sub', 'sup', 'left', 'right', 'center', 'justify', 'font=', 'ol', 'table', 'td', 'tr', 'hr', 'youtube', 'rtl', 'ltr',);
 
-		$sqsl = 'DELETE FROM ' . $this->table_prefix . 'bbcodes WHERE ' . $this->db->sql_in_set('bbcode_tag', $bbcodedata);
-		$this->db->sql_query($sqsl);
+		$sql = 'DELETE FROM ' . $this->table_prefix . 'bbcodes WHERE ' . $this->db->sql_in_set('bbcode_tag', $bbcodedata);
+		$this->db->sql_query($sql);
 
 		$sql = 'SELECT MAX(bbcode_id) AS max_id
     				FROM ' . $this->table_prefix . 'bbcodes';
@@ -52,7 +48,6 @@ class bbcodedata extends \phpbb\db\migration\migration
 		$style_ids = 0;
 		if ($styles_row = $this->db->sql_fetchrow()) {
 			$style_ids = $styles_row['max_id'];
-
 		}
 		$this->db->sql_freeresult($result);
 

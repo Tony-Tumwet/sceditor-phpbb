@@ -1,5 +1,7 @@
 # WYSIWYG Editor phpBB
 
+[![Build Status](https://travis-ci.org/cYbercOsmOnauT/wysiwygsceditorphpbb.svg?branch=master)](https://travis-ci.org/cYbercOsmOnauT/wysiwygsceditorphpbb)
+
 ###how to install
 copy folder cosmo/ to phpbb 3.1 ext/ Folder
 

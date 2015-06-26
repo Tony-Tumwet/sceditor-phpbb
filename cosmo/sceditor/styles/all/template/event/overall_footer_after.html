@@ -15,7 +15,7 @@
 			emoticonsRoot: "{U_EMOTICONS_ROOT}",
 			emoticons: {
 				dropdown: { <!-- BEGIN emoticons -->
-					"{emoticons.code}": "{emoticons.url}"<!-- IF !emoticons.S_LAST_ROW -->,<!-- ENDIF -->
+					"{emoticons.code|escape('js')}": "{emoticons.url}"<!-- IF !emoticons.S_LAST_ROW -->,<!-- ENDIF -->
 					<!-- END emoticons -->
 				}
 			},

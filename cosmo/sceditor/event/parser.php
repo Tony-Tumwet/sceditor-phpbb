@@ -15,34 +15,38 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Event listener
  */
-class parser implements EventSubscriberInterface {
+class parser implements EventSubscriberInterface
+{
 	private $color_open;
 	private $color_close;
 	private $bbcode;
 	private $bbcode_id;
 
-	public static function getSubscribedEvents() {
+	public static function getSubscribedEvents()
+	{
 		return array(
-			'core.modify_bbcode_init'              => 'initialize_fp_color',
-			'core.bbcode_cache_init_end'           => 'initialize_sp_color',
-			'core.validate_bbcode_by_extension'    => 'bbcode_first_pass_colors',
+			'core.modify_bbcode_init' => 'initialize_fp_color',
+			'core.bbcode_cache_init_end' => 'initialize_sp_color',
+			'core.validate_bbcode_by_extension' => 'bbcode_first_pass_colors',
 			'core.bbcode_second_pass_by_extension' => 'bbcode_second_pass_color'
 		);
 	}
 
-	public function initialize_fp_color($event) {
+	public function initialize_fp_color($event)
+	{
 		$new_color = $event['bbcodes'];
 		$new_color['color'] = array('bbcode_id' => 6, 'regexp' => array('!\[color=(#[0-9a-f]{3}|#[0-9a-f]{6}|[a-z\-]+)\](.+)\[/color\]!uise' => "\$this->validate_bbcode_by_extension('\$0', \$this)"));
 
 		$event['bbcodes'] = $new_color;
 	}
 
-	public function initialize_sp_color($event) {
+	public function initialize_sp_color($event)
+	{
 		$tmp = $event['bbcode_cache'];
 		$tmp[6] = array(
 			'preg' => array(
 				'/\[color=(#[0-9a-f]{3}|#[0-9a-f]{6}|[a-z\-]+):$uid\]((?!\[color=(#[0-9a-f]{3}|#[0-9a-f]{6}|[a-z\-]+):$uid\]).)?/ise' => "\$this->bbcode_second_pass_by_extension('open', \$this,  \$bbcode_id, '\$1', '\$2')",
-				'/\[\/color:$uid\]/ie'                                                                                                => "\$this->bbcode_second_pass_by_extension('close', \$this, \$bbcode_id)"
+				'/\[\/color:$uid\]/ie' => "\$this->bbcode_second_pass_by_extension('close', \$this, \$bbcode_id)"
 			)
 		);
 		$event['bbcode_cache'] = $tmp;
@@ -51,7 +55,8 @@ class parser implements EventSubscriberInterface {
 	/**
 	 * Firstpass color bbcode
 	 */
-	public function bbcode_first_pass_colors($event) {
+	public function bbcode_first_pass_colors($event)
+	{
 		$in = $event['params_array'][0];
 		$this->bbcode = $event['params_array'][1];
 		$in = str_replace("\r\n", "\n", str_replace('\"', '"', trim($in)));
@@ -74,7 +79,8 @@ class parser implements EventSubscriberInterface {
 	 * Secondpass color bbcode
 	 */
 
-	public function bbcode_second_pass_color($event) {
+	public function bbcode_second_pass_color($event)
+	{
 		$mode = $event['params_array'][0];
 		$this->bbcode = $event['params_array'][1];
 		$this->bbcode_id = $event['params_array'][2];
@@ -86,13 +92,13 @@ class parser implements EventSubscriberInterface {
 			$color = $event['params_array'][3];
 			$text = $event['params_array'][4];
 			$event['return'] = $this->bbcode_second_pass_color_open($color, $text);
-		}
-		else {
+		} else {
 			$event['return'] = $this->bbcode_second_pass_color_close();
 		}
 	}
 
-	private function bbcode_second_pass_color_open($color, $text) {
+	private function bbcode_second_pass_color_open($color, $text)
+	{
 		// Already got the part?
 		if (!is_string($this->color_open)) {
 			$this->get_tpl_parts();
@@ -112,7 +118,8 @@ class parser implements EventSubscriberInterface {
 		return $text;
 	}
 
-	private function bbcode_second_pass_color_close() {
+	private function bbcode_second_pass_color_close()
+	{
 		// Already got the part?
 		if (!is_string($this->color_close)) {
 			$this->get_tpl_parts();
@@ -121,7 +128,8 @@ class parser implements EventSubscriberInterface {
 		return $this->color_close;
 	}
 
-	private function get_tpl_parts() {
+	private function get_tpl_parts()
+	{
 		$tpl = $this->bbcode->bbcode_tpl('color', $this->bbcode_id);
 		$strpos = strpos($tpl, '$2');
 		$this->color_open = substr($tpl, 0, $strpos);

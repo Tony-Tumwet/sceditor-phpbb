@@ -15,7 +15,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Event listener
  */
-class sce implements EventSubscriberInterface {
+class sce implements EventSubscriberInterface
+{
 	/** @var \phpbb\template\template */
 	private $template;
 	/** @var \phpbb\user */
@@ -29,7 +30,8 @@ class sce implements EventSubscriberInterface {
 
 	private $css_file = 'editarea.css';
 
-	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\template\template $template, \phpbb\config\config $config, \phpbb\user $user, $root_path) {
+	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\template\template $template, \phpbb\config\config $config, \phpbb\user $user, $root_path)
+	{
 		$this->template = $template;
 		$this->user = $user;
 		$this->config = $config;
@@ -37,19 +39,21 @@ class sce implements EventSubscriberInterface {
 		$this->root_path = $root_path;
 	}
 
-	static public function getSubscribedEvents() {
+	static public function getSubscribedEvents()
+	{
 		return array(
-			'core.generate_smilies_after'  => 'initialize_sceditor',
+			'core.generate_smilies_after' => 'initialize_sceditor',
 			'core.viewtopic_modify_page_title' => 'initialize_sceditor'
 		);
 	}
 
-	public function initialize_sceditor () {
+	public function initialize_sceditor()
+	{
 		// Activate the SCEditor
 		$this->template->assign_vars(array('S_SCEDITOR' => true,
-		                                   'MAX_FONTSIZE' => $this->config['max_post_font_size'],
-		                                   'U_EMOTICONS_ROOT' => $this->root_path . $this->config['smilies_path'] . '/',
-		                                   'U_CSS' => $this->root_path.'ext/cosmo/sceditor/styles/all/template/js/themes/'.$this->css_file));
+			'MAX_FONTSIZE' => $this->config['max_post_font_size'],
+			'U_EMOTICONS_ROOT' => $this->root_path . $this->config['smilies_path'] . '/',
+			'U_CSS' => $this->root_path . 'ext/cosmo/sceditor/styles/all/template/js/themes/' . $this->css_file));
 
 		// We need to get all smilies with url and code
 		$sql = 'SELECT smiley_url, code

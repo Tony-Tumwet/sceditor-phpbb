@@ -1,0 +1,39 @@
+{
+  "name": "cosmo/sceditor",
+  "type": "phpbb-extension",
+  "description": "WYSIWYG BBCode Editor",
+  "homepage": "https://github.com/cYbercOsmOnauT/wysiwygsceditorphpbb",
+  "version": "1.3.2",
+  "time": "2015-03-28",
+  "license": "GPL-2.0",
+  "authors": [
+    {
+      "name": "Tekin Birdüzen",
+      "email": "t.birduezen@web-coding.eu",
+      "homepage": "http://www.web-coding.eu",
+      "role": "owner"
+    },
+    {
+      "name": "Nassim Redwan",
+      "email": "redoin10@gmail.com",
+      "role": "owner"
+    }
+  ],
+  "require": {
+    "php": ">=5.3.3"
+  },
+  "require-dev": {
+    "phpbb/epv": "dev-master"
+  },
+  "extra": {
+    "display-name": "phpbb 3.1 WYSIWYG BBCode Editor",
+    "soft-require": {
+      "phpbb/phpbb": ">=3.1.0-RC2,<3.2.*@dev"
+    },
+    "version-check": {
+      "host": "www.web-coding.eu",
+      "directory": "/phpbb-extensions",
+      "filename": "wysiwyg.json"
+    }
+  }
+}

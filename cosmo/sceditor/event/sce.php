@@ -7,7 +7,6 @@
  * @copyright Tekin Birdüzen
  */
 
-
 namespace cosmo\sceditor\event;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -30,6 +29,8 @@ class sce implements EventSubscriberInterface
 
 	private $css_file = 'editarea.css';
 
+	private $jsDir;
+
 	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\template\template $template, \phpbb\config\config $config, \phpbb\user $user, $root_path)
 	{
 		$this->template = $template;
@@ -37,6 +38,7 @@ class sce implements EventSubscriberInterface
 		$this->config = $config;
 		$this->db = $db;
 		$this->root_path = $root_path;
+		$this->jsDir = realpath(__DIR__ . '/../styles/all/template/js/languages') . '/';
 	}
 
 	static public function getSubscribedEvents()
@@ -55,14 +57,37 @@ class sce implements EventSubscriberInterface
 			'U_EMOTICONS_ROOT' => $this->root_path . $this->config['smilies_path'] . '/',
 			'U_CSS' => $this->root_path . 'ext/cosmo/sceditor/styles/all/template/js/themes/' . $this->css_file));
 
+		// Localize it maybe?
+		$lang = $this->get_lang();
+		if ($lang)
+		{
+			$this->template->assign_var('L_SCEDITOR_LANG', $lang);
+		}
 		// We need to get all smilies with url and code
 		$sql = 'SELECT smiley_url, code
 			FROM ' . SMILIES_TABLE;
 		// Caching the smilies for 10 minutes should be okay
 		// they don't get changed so often
 		$result = $this->db->sql_query($sql, 600);
-		while ($row = $this->db->sql_fetchrow($result)) {
+		while ($row = $this->db->sql_fetchrow($result))
+		{
 			$this->template->assign_block_vars('emoticons', array('code' => $row['code'], 'url' => $row['smiley_url']));
 		}
+	}
+
+	private function get_lang()
+	{
+		$lang = substr($this->user->lang['USER_LANG'], 0, 2);
+
+		// English is default and doesn't have to be loaded
+		if ('en' === $lang)
+		{
+			return false;
+		}
+		if (is_readable($this->jsDir . "{$lang}.js"))
+		{
+			return $lang;
+		}
+		return false;
 	}
 }

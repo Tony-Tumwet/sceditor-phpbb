@@ -2,7 +2,11 @@
 <!-- INCLUDEJS @cosmo_sceditor/js/jquery.sceditor.bbcode.min.js -->
 <!-- IF L_SCEDITOR_LANG --><!-- INCLUDEJS @cosmo_sceditor/js/languages/{L_SCEDITOR_LANG}.js --><!-- ENDIF -->
 <script type="text/javascript">
-	var max_fontsize = {MAX_FONTSIZE};
+	var max_fontsize = {MAX_FONTSIZE},
+	<!-- IF S_SMILIES_ALLOWED -->
+			smiliesButton,
+	<!-- ENDIF -->
+			sceInstance;
 	$(function () {
 		// Replace all textarea's
 		// with SCEditor
@@ -11,8 +15,10 @@
 			<!-- IF S_QUICK_REPLY -->
 			toolbar: "bold,italic,underline,strike|code,quote,removeformat|source",
 			<!-- ELSE -->
-			toolbarExclude: "emoticon",
+			toolbarExclude: "emoticon,youtube,email,image,table,horizontalrule,date,time,ltr,rtl",
 			<!-- ENDIF -->
+			colors: "#000000,#ffffff,#ff9900,#ff99cc,#333399,#0000ff|#333333,#ccffff,#ff6600,#99ccff,#339966,#000080|#666699,#ffff99,#ff0000,#99cc00,#3366ff,#008080|#808080,#ffcc99,#800000,#993300,#33cccc,#008000|#999999,#ffff00,#800080,#333300,#00ccff,#00ff00|#c0c0c0,#ffcc00,#ff00ff,#808000,#00ffff,#993366",
+			<!-- IF S_SMILIES_ALLOWED -->
 			emoticonsRoot: "{U_EMOTICONS_ROOT}",
 			emoticons: {
 				dropdown: { <!-- BEGIN emoticons -->
@@ -20,12 +26,29 @@
 					<!-- END emoticons -->
 				}
 			},
+			<!-- ELSE -->
+			emoticonsEnabled: false,
+			<!-- ENDIF -->
 			style: '{U_CSS}?assets_version={T_ASSETS_VERSION}'
 		});
 
 		// Fix the position of the editor layer
 		$('.sceditor-container:eq(0)').css('z-index', 1);
 		$('#notification_list').css('z-index', 20);
+
+		// Set used nodes (mostly checkboxes)
+		sceInstance = $('textarea').sceditor('instance');
+		<!-- IF S_SMILIES_ALLOWED -->
+		smiliesButton = $('#disable_smilies');
+		smiliesButton.on('click', function() {
+			if (smiliesButton.is(':checked')) {
+				sceInstance.emoticons(false);
+			}
+			else {
+				sceInstance.emoticons(true);
+			}
+		});
+		<!-- ENDIF -->
 	});
 </script>
 <!-- INCLUDEJS @cosmo_sceditor/js/sce.js -->

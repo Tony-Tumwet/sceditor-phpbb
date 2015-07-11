@@ -4,7 +4,12 @@
 <script type="text/javascript">
 	var max_fontsize = {MAX_FONTSIZE},
 	<!-- IF S_SMILIES_ALLOWED -->
-			smiliesButton,
+			smiliesCheckbox,
+	<!-- ENDIF -->
+			sourceButton, sourceButtonAvailable,
+	<!-- IF S_BBCODE_ALLOWED -->
+			sourceCheckbox,
+			currentSourceMode,
 	<!-- ENDIF -->
 			sceInstance;
 	$(function () {
@@ -15,9 +20,8 @@
 			<!-- IF S_QUICK_REPLY -->
 			toolbar: "bold,italic,underline,strike|code,quote,removeformat|source",
 			<!-- ELSE -->
-			toolbarExclude: "emoticon,youtube,email,image,table,horizontalrule,date,time,ltr,rtl",
+			toolbarExclude: "emoticon",
 			<!-- ENDIF -->
-			colors: "#000000,#ffffff,#ff9900,#ff99cc,#333399,#0000ff|#333333,#ccffff,#ff6600,#99ccff,#339966,#000080|#666699,#ffff99,#ff0000,#99cc00,#3366ff,#008080|#808080,#ffcc99,#800000,#993300,#33cccc,#008000|#999999,#ffff00,#800080,#333300,#00ccff,#00ff00|#c0c0c0,#ffcc00,#ff00ff,#808000,#00ffff,#993366",
 			<!-- IF S_SMILIES_ALLOWED -->
 			emoticonsRoot: "{U_EMOTICONS_ROOT}",
 			emoticons: {
@@ -38,10 +42,45 @@
 
 		// Set used nodes (mostly checkboxes)
 		sceInstance = $('textarea').sceditor('instance');
+		sourceButton = $('a.sceditor-button-source');
+		sourceButtonAvailable = !!sourceButton.length;
+		<!-- IF S_BBCODE_ALLOWED -->
+		sourceCheckbox = $('#disable_bbcode');
+		<!-- IF not S_BBCODE_CHECKED eq '' -->
+		sceInstance.sourceMode(true);
+		<!-- ENDIF -->
+		sourceCheckbox.on('click', function() {
+			if (sourceCheckbox.is(':checked')) {
+				// We need this to know if we have to go back to WYSIWYG or not
+				currentSourceMode = sceInstance.sourceMode();
+				sceInstance.sourceMode(true);
+				if (sourceButtonAvailable) {
+					sourceButton.hide();
+				}
+			}
+			else {
+				// Only back to WYSIWYG if it was active before
+				if (!currentSourceMode) {
+					sceInstance.sourceMode(false);
+				}
+				if (sourceButtonAvailable) {
+					sourceButton.show();
+				}
+			}
+		});
+		<!-- ELSE -->
+		if (sourceButtonAvailable) {
+			sourceButton.hide();
+		}
+		sceInstance.sourceMode(true);
+		<!-- ENDIF -->
 		<!-- IF S_SMILIES_ALLOWED -->
-		smiliesButton = $('#disable_smilies');
-		smiliesButton.on('click', function() {
-			if (smiliesButton.is(':checked')) {
+		smiliesCheckbox = $('#disable_smilies');
+		<!-- IF not S_SMILIES_CHECKED eq '' -->
+		sceInstance.emoticons(false);
+		<!-- ENDIF -->
+		smiliesCheckbox.on('click', function() {
+			if (smiliesCheckbox.is(':checked')) {
 				sceInstance.emoticons(false);
 			}
 			else {

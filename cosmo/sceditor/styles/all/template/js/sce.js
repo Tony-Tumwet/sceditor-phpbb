@@ -62,12 +62,11 @@ $.sceditor.command.set('size', {
 				editor.closeDropDown(true);
 				e.preventDefault();
 			},
-			size,
-			check_maxsize = !!max_fontsize;
+			size;
 
 		for (var i = 1; i < 7; i++) {
 			// Only consider maxsize when set greater 0
-			if (check_maxsize && sizes[i - 1] > max_fontsize) {
+			if (sceController.isMaxFontsizeSet && sizes[i - 1] > sceController.getMaxFontsize) {
 				break;
 			}
 			content.append($('<a class="sceditor-fontsize-option" data-size="' + i + '" href="#"><font size="' + i + '">' + i + '</font></a>').click(clickFunc));
@@ -142,8 +141,9 @@ function setSmilie(tag) {
 }
 
 $(function () {
+	sceController.init();
 	// Don't need to select the node again and again
-	textarea = $('textarea');
+	textarea = sceController.getTextarea();
 	// Hide the normal BBCode Buttons
 	$('#format-buttons').hide();
 	$('#smiley-box a img').each(function () {

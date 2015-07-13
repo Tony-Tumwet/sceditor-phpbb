@@ -2,93 +2,151 @@
 <!-- INCLUDEJS @cosmo_sceditor/js/jquery.sceditor.bbcode.min.js -->
 <!-- IF L_SCEDITOR_LANG --><!-- INCLUDEJS @cosmo_sceditor/js/languages/{L_SCEDITOR_LANG}.js --><!-- ENDIF -->
 <script type="text/javascript">
-	var max_fontsize = {MAX_FONTSIZE},
-	<!-- IF S_SMILIES_ALLOWED -->
-			smiliesCheckbox,
-	<!-- ENDIF -->
-			sourceButton, sourceButtonAvailable,
-	<!-- IF S_BBCODE_ALLOWED -->
-			sourceCheckbox,
-			currentSourceMode,
-	<!-- ENDIF -->
-			sceInstance;
-	$(function () {
-		// Replace all textarea's
-		// with SCEditor
-		$("textarea").sceditor({
-			plugins: "bbcode",
-			<!-- IF S_QUICK_REPLY -->
-			toolbar: "bold,italic,underline,strike|code,quote,removeformat|source",
-			<!-- ELSE -->
-			toolbarExclude: "emoticon",
-			<!-- ENDIF -->
-			<!-- IF S_SMILIES_ALLOWED -->
-			emoticonsRoot: "{U_EMOTICONS_ROOT}",
-			emoticons: {
-				dropdown: { <!-- BEGIN emoticons -->
-					"{emoticons.code|escape('js')}": "{emoticons.url}"<!-- IF !emoticons.S_LAST_ROW -->,<!-- ENDIF -->
-					<!-- END emoticons -->
-				}
-			},
-			<!-- ELSE -->
-			emoticonsEnabled: false,
-			<!-- ENDIF -->
-			style: '{U_CSS}?assets_version={T_ASSETS_VERSION}'
-		});
-
-		// Fix the position of the editor layer
-		$('.sceditor-container:eq(0)').css('z-index', 1);
-		$('#notification_list').css('z-index', 20);
-
-		// Set used nodes (mostly checkboxes)
-		sceInstance = $('textarea').sceditor('instance');
-		sourceButton = $('a.sceditor-button-source');
-		sourceButtonAvailable = !!sourceButton.length;
-		<!-- IF S_BBCODE_ALLOWED -->
-		sourceCheckbox = $('#disable_bbcode');
-		<!-- IF not S_BBCODE_CHECKED eq '' -->
-		sceInstance.sourceMode(true);
-		<!-- ENDIF -->
-		sourceCheckbox.on('click', function() {
-			if (sourceCheckbox.is(':checked')) {
-				// We need this to know if we have to go back to WYSIWYG or not
-				currentSourceMode = sceInstance.sourceMode();
-				sceInstance.sourceMode(true);
-				if (sourceButtonAvailable) {
-					sourceButton.hide();
-				}
-			}
-			else {
-				// Only back to WYSIWYG if it was active before
-				if (!currentSourceMode) {
-					sceInstance.sourceMode(false);
-				}
-				if (sourceButtonAvailable) {
-					sourceButton.show();
-				}
-			}
-		});
-		<!-- ELSE -->
-		if (sourceButtonAvailable) {
-			sourceButton.hide();
-		}
-		sceInstance.sourceMode(true);
-		<!-- ENDIF -->
+	var sceController = (function ($, doc, undefined) {
+		var _sourceButton, _sourceButtonAvailable,
+				_textarea,
 		<!-- IF S_SMILIES_ALLOWED -->
-		smiliesCheckbox = $('#disable_smilies');
-		<!-- IF not S_SMILIES_CHECKED eq '' -->
-		sceInstance.emoticons(false);
+				_smiliesCheckbox,
 		<!-- ENDIF -->
-		smiliesCheckbox.on('click', function() {
-			if (smiliesCheckbox.is(':checked')) {
-				sceInstance.emoticons(false);
-			}
-			else {
-				sceInstance.emoticons(true);
-			}
-		});
+		<!-- IF S_BBCODE_ALLOWED -->
+				_sourceCheckbox,
+				_currentSourceMode,
 		<!-- ENDIF -->
-	});
+				_sceInstance,
+				_max_fontsize = {MAX_FONTSIZE},
+				_internalMethods = {
+					'sourceMode': function (_active) {
+						if (typeof _active === 'undefined') {
+							return _sceInstance.sourceMode();
+						}
+						_active = !!_active;
+						_sceInstance.sourceMode(_active);
+					},
+					'sourceButton': {
+						'init': function () {
+							_sourceButton = $('a.sceditor-button-source');
+							_sourceButtonAvailable = !!_sourceButton.length;
+							_sourceCheckbox = $('#disable_bbcode');
+						},
+						'hide': function () {
+							if (_sourceButtonAvailable) {
+								_sourceButton.hide();
+							}
+						},
+						'setOnClick': function () {
+							_sourceCheckbox.on('click', function () {
+								if (_sourceCheckbox.is(':checked')) {
+									// We need this to know if we have to go back to WYSIWYG or not
+									_currentSourceMode = _internalMethods.sourceMode();
+									_internalMethods.sourceMode(true);
+									if (_sourceButtonAvailable) {
+										_sourceButton.hide();
+									}
+								}
+								else {
+									// Only back to WYSIWYG if it was active before
+									if (!_currentSourceMode) {
+										_internalMethods.sourceMode(false);
+									}
+									if (_sourceButtonAvailable) {
+										_sourceButton.show();
+									}
+								}
+							});
+						}
+					},
+					'emoticons': {
+						'init': function () {
+							_smiliesCheckbox = $('#disable_smilies');
+						},
+						'setOnClick': function () {
+							_smiliesCheckbox.on('click', function () {
+								if (_smiliesCheckbox.is(':checked')) {
+									_sceInstance.emoticons(false);
+								}
+								else {
+									_sceInstance.emoticons(true);
+								}
+							});
+						}
+					}
+				};
+		return {
+			'getMaxFontsize': function () {
+				return _max_fontsize;
+			},
+			'isMaxFontsizeSet': function () {
+				return !!_max_fontsize;
+			},
+			'getTextarea': function() {
+				if (typeof _textarea === 'undefined' || !_textarea.length) {
+					_textarea = $('textarea');
+				}
+				return _textarea;
+			},
+			'init': function () {
+				this.getTextarea();
+				// Replace all textarea's
+				// with SCEditor
+				_textarea.sceditor({
+					plugins: "bbcode",
+					<!-- IF S_QUICK_REPLY -->
+					toolbar: "bold,italic,underline,strike|code,quote,removeformat|source",
+					<!-- ELSE -->
+					toolbarExclude: "emoticon",
+					<!-- ENDIF -->
+					<!-- IF S_SMILIES_ALLOWED -->
+					emoticonsRoot: "{U_EMOTICONS_ROOT}",
+					emoticons: {
+						dropdown: {
+							<!-- BEGIN emoticons -->
+							"{emoticons.code|escape('js')}": "{emoticons.url}"<!-- IF !emoticons.S_LAST_ROW -->, <!-- ENDIF -->
+							<!-- END emoticons -->
+						}
+					},
+					<!-- ELSE -->
+					emoticonsEnabled: false,
+					<!-- ENDIF -->
+					style: '{U_CSS}?assets_version={T_ASSETS_VERSION}'
+				});
+
+				// Fix the position of the editor layer
+				$('.sceditor-container:eq(0)').css('z-index', 1);
+				$('#notification_list').css('z-index', 20);
+
+				// Set used nodes (mostly checkboxes)
+				_sceInstance = _textarea.sceditor('instance');
+
+				// Initialize the availability of the SCEditor source button
+				_internalMethods.sourceButton.init();
+				<!-- IF S_BBCODE_ALLOWED -->
+				<!-- IF not S_BBCODE_CHECKED eq '' -->
+				// BBCode is checked as disallowed, set SCEditor to sourceMode
+				_internalMethods.sourceMode(true);
+				<!-- ENDIF -->
+				// Initialize the onclick event for the BBCode checkbox
+				_internalMethods.sourceButton.setOnClick();
+				<!-- ELSE -->
+				/**
+				 * BBCodes are completly disallowed
+				 * Hide the sourceButton of SCEditor if visible
+				 * and change to sourceMode
+				 */
+				_internalMethods.sourceButton.hide();
+				_internalMethods.sourceMode(true);
+				<!-- ENDIF -->
+
+				// Emoticons part
+				<!-- IF S_SMILIES_ALLOWED -->
+				_internalMethods.emoticons.init();
+				<!-- IF not S_SMILIES_CHECKED eq '' -->
+				_sceInstance.emoticons(false);
+				<!-- ENDIF -->
+				_internalMethods.emoticons.setOnClick();
+				<!-- ENDIF -->
+			}
+		}
+	})(jQuery, document);
 </script>
 <!-- INCLUDEJS @cosmo_sceditor/js/sce.js -->
 <!-- ENDIF -->

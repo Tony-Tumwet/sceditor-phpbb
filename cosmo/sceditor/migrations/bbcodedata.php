@@ -1,7 +1,10 @@
 <?php
 /**
  *
- * @package Referrers
+ * @author    Tekin Birdüzen <t.birduezen@web-coding.eu>
+ * @since     09.06.15
+ * @version   1.7.0
+ * @copyright Tekin Birdüzen
  * @copyright (c) 2014 ForumHulp.com
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *

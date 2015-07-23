@@ -2,7 +2,7 @@
 <!-- INCLUDEJS @cosmo_sceditor/js/jquery.sceditor.bbcode.min.js -->
 <!-- IF L_SCEDITOR_LANG --><!-- INCLUDEJS @cosmo_sceditor/js/languages/{L_SCEDITOR_LANG}.js --><!-- ENDIF -->
 <script type="text/javascript">
-	var sceController = (function ($, doc, undefined) {
+	var sceController = (function ($, undefined) {
 		var _sourceButton, _sourceButtonAvailable,
 				_textarea,
 		<!-- IF S_SMILIES_ALLOWED -->
@@ -14,6 +14,13 @@
 		<!-- ENDIF -->
 				_sceInstance,
 				_max_fontsize = {MAX_FONTSIZE},
+				_lastStyleSheet = { },
+				_styleSheets,
+				_cssString,
+				_cssBase,
+				_docroot,
+				_fullDocroot,
+				_tmp,
 				_internalMethods = {
 					'sourceMode': function (_active) {
 						if (typeof _active === 'undefined') {
@@ -55,6 +62,20 @@
 							});
 						}
 					},
+					'getDocroot': function () {
+						if ('undefined' !== typeof _docroot) {
+							return _docroot;
+						}
+						else if ('/' === location.pathname.substr(-1)) {
+							_docroot = location.pathname;
+						}
+						else {
+							_tmp = location.pathname.lastIndexOf('/') + 1;
+							_docroot = location.pathname.substr(0, _tmp);
+						}
+						_fullDocroot = location.protocol + '//' + ('' === location.username ? '' : (location.username + ('' === location.password ? '' : (':' + location.password))+'@')) + location.hostname + ('' === location.port ? '' : ':' + location.port) + _docroot;
+						return _docroot;
+					},
 					'emoticons': {
 						'init': function () {
 							_smiliesCheckbox = $('#disable_smilies');
@@ -69,6 +90,91 @@
 								}
 							});
 						}
+					},
+					'css': {
+						'getBase': function (_cssStyleSheet) {
+							// Is this really a CSSStyleSheet object?
+							if (!(_cssStyleSheet instanceof CSSStyleSheet)) {
+								return false;
+							}
+							// Did we parse this StyleSheet already?
+							if (_cssStyleSheet === _lastStyleSheet && !(typeof _cssBase === 'undefined')) {
+								return _cssBase;
+							}
+
+							_tmp = _cssStyleSheet.href.match(/[^?]+\//);
+							_cssBase = _tmp[0];
+							_lastStyleSheet = _cssStyleSheet;
+							return _cssBase;
+						},
+						'realpath': function (_path) {
+							/**
+							 *  I dont use
+							 *  if (-1 !== $.inArray(0, [path.indexOf('/'), path.indexOf('http://'), path.indexOf('https://'), path.length])) {
+						 *  because all indexOf and the length have to be calculated before the check starts.
+						 *  The "normal" version is faster.
+						 */
+							// Do we really have to do something?
+							if (0 === _path.length) {
+								// No path info.. nothing to do
+								return _path;
+							}
+							else if (0 === _path.indexOf('http://') || 0 === _path.indexOf('https://')) {
+								// Check if the path starts with Docroot and if yes cut it out
+								_internalMethods.getDocroot();
+								if (0 === _path.indexOf(_fullDocroot)) {
+									_path = _path.substr(_fullDocroot.length);
+								}
+							}
+
+							// Lets do it
+							_tmp = _path.split('/');
+							_path = [];
+							for (var _i in _tmp) {
+								if (_tmp.hasOwnProperty(_i) && '.' !== _tmp[_i] && '' !== _tmp[_i]) {
+									if ('..' === _tmp[_i]) {
+										_path.pop();
+									}
+									else {
+										_path.push(_tmp[_i]);
+									}
+								}
+							}
+							_path = _path.join('/');
+							return _path;
+						},
+						'getWindowStyles': function () {
+							var _i, _j, _cssRules, _count, _countJ;
+							_styleSheets = document.styleSheets;
+							_cssString = '';
+							_count = _styleSheets.length;
+
+							for (_i = 0; _i < _count; _i++) {
+								this.getBase(_styleSheets[_i]);
+
+								if (_styleSheets[_i].cssRules) {
+									_cssRules = _styleSheets[_i].cssRules;
+									_countJ = _cssRules.length;
+									for (_j = 0; _j < _countJ; _j++) {
+										_cssString += this.fixUrlPathes(_cssRules[_j].cssText);
+									}
+								}
+								else {
+									_cssString += this.fixUrlPathes(_styleSheets[_i].cssText);  // IE8 and earlier
+								}
+							}
+						},
+						'fixUrlPathes': function (_css) {
+							var _url, _i;
+							if (-1 === _css.indexOf('url')) {
+								// no url in the CSS String, there is nothing to do
+								return _css;
+							}
+							_tmp = _css.replace(/url\s*\(\s*["']?([^)]+?)["']?\s*\)/g, function (matching, group1) {
+								return('url("'+_internalMethods.css.realpath(_cssBase+group1)+'")');
+							});
+							return _tmp;
+						}
 					}
 				};
 		return {
@@ -78,14 +184,15 @@
 			'isMaxFontsizeSet': function () {
 				return !!_max_fontsize;
 			},
-			'getTextarea': function() {
+			'getTextarea': function () {
 				if (typeof _textarea === 'undefined' || !_textarea.length) {
-					_textarea = $('textarea');
+					_textarea = $('textarea[name="message"]');
 				}
 				return _textarea;
 			},
 			'init': function () {
 				this.getTextarea();
+				_internalMethods.css.getWindowStyles();
 				// Replace all textarea's
 				// with SCEditor
 				_textarea.sceditor({
@@ -107,7 +214,7 @@
 					<!-- ELSE -->
 					emoticonsEnabled: false,
 					<!-- ENDIF -->
-					style: '{U_CSS}?assets_version={T_ASSETS_VERSION}'
+					style: '" /><style type="text/css">' + _cssString + '</style><link rel="stylesheet" type="text/css" href="{U_CSS}?assets_version={T_ASSETS_VERSION}'
 				});
 
 				// Fix the position of the editor layer
@@ -145,7 +252,7 @@
 				_internalMethods.emoticons.setOnClick();
 				<!-- ENDIF -->
 			},
-			'destroy': function() {
+			'destroy': function () {
 				// Make sure that this is only called
 				// when SCEditor is initialized
 				if (_sceInstance instanceof Object && _sceInstance.hasOwnProperty('destroy')) {
@@ -153,7 +260,7 @@
 				}
 			}
 		}
-	})(jQuery, document);
-</script>
-<!-- INCLUDEJS @cosmo_sceditor/js/sce.js -->
-<!-- ENDIF -->
+	})(jQuery);
+	</script >
+	<!-- INCLUDEJS @cosmo_sceditor/js/sce.js -->
+	<!-- ENDIF -->

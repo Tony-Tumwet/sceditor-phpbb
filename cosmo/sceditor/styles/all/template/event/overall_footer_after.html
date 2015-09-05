@@ -73,7 +73,7 @@
 							_tmp = location.pathname.lastIndexOf('/') + 1;
 							_docroot = location.pathname.substr(0, _tmp);
 						}
-						_fullDocroot = location.protocol + '//' + ('' === location.username ? '' : (location.username + ('' === location.password ? '' : (':' + location.password))+'@')) + location.hostname + ('' === location.port ? '' : ':' + location.port) + _docroot;
+						_fullDocroot = location.protocol + '//' + ('' === location.username ? '' : (location.username + ('' === location.password ? '' : (':' + location.password)) + '@')) + location.hostname + ('' === location.port ? '' : ':' + location.port) + _docroot;
 						return _docroot;
 					},
 					'emoticons': {
@@ -98,11 +98,18 @@
 								return false;
 							}
 							// Did we parse this StyleSheet already?
-							if (_cssStyleSheet === _lastStyleSheet && !(typeof _cssBase === 'undefined')) {
+							if (_cssStyleSheet === _lastStyleSheet && !('undefined' === typeof _cssBase)) {
 								return _cssBase;
 							}
 
-							_tmp = _cssStyleSheet.href.match(/[^?]+\//);
+							// Stylesheet directly onn the page?
+							if (null === typeof _cssStyleSheet.href) {
+								_tmp = location.href.match(/[^?]+\//);
+							}
+							else {
+								_tmp = _cssStyleSheet.href.match(/[^?]+\//);
+							}
+
 							_cssBase = _tmp[0];
 							_lastStyleSheet = _cssStyleSheet;
 							return _cssBase;
@@ -171,7 +178,7 @@
 								return _css;
 							}
 							_tmp = _css.replace(/url\s*\(\s*["']?([^)]+?)["']?\s*\)/g, function (matching, group1) {
-								return('url("'+_internalMethods.css.realpath(_cssBase+group1)+'")');
+								return ('url("' + _internalMethods.css.realpath(_cssBase + group1) + '")');
 							});
 							return _tmp;
 						}
@@ -261,6 +268,7 @@
 			}
 		}
 	})(jQuery);
-	</script >
+	</
+	script >
 	<!-- INCLUDEJS @cosmo_sceditor/js/sce.js -->
 	<!-- ENDIF -->

@@ -103,7 +103,7 @@
 							}
 
 							// Stylesheet directly on the page?
-							if (null === typeof _cssStyleSheet.href) {
+							if ((null === typeof _cssStyleSheet.href) || (null === _cssStyleSheet.href)) {
 								_tmp = location.href.match(/[^?]+\//);
 							}
 							else {

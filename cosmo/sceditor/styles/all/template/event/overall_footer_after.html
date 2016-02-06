@@ -23,6 +23,9 @@
 				_tmp,
 				_internalMethods = {
 					'sourceMode': function (_active) {
+						if ('undefined' === typeof _sceInstance || 'undefined' === typeof _sceInstance.sourceMode) {
+							return null;
+						}
 						if (typeof _active === 'undefined') {
 							return _sceInstance.sourceMode();
 						}
@@ -158,6 +161,11 @@
 
 							for (_i = 0; _i < _count; _i++) {
 								this.getBase(_styleSheets[_i]);
+
+								// Don't parse external CSS
+								if (_cssBase !== _fullDocroot) {
+									continue;
+								}
 
 								if (_styleSheets[_i].cssRules) {
 									_cssRules = _styleSheets[_i].cssRules;

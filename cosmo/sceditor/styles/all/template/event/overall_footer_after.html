@@ -23,6 +23,7 @@
 				_tmp,
 				_internalMethods = {
 					'sourceMode': function (_active) {
+						// Are we on a page where SCEditor is loaded and used?
 						if ('undefined' === typeof _sceInstance || 'undefined' === typeof _sceInstance.sourceMode) {
 							return null;
 						}

@@ -3,7 +3,7 @@
  *
  * @author    Tekin Birdüzen <t.birduezen@web-coding.eu>
  * @since     09.06.15
- * @version   1.7.5
+ * @version   1.7.6
  * @copyright Tekin Birdüzen
  * @copyright (c) 2014 ForumHulp.com
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
@@ -233,12 +233,12 @@ class bbcodedata extends \phpbb\db\migration\migration
 				'bbcode_tag' => 'hr',
 				'bbcode_helpline' => '',
 				'display_on_posting' => 0,
-				'bbcode_match' => '[hr][/hr]',
+				'bbcode_match' => '[hr]',
 				'bbcode_tpl' => '<hr />',
-				'first_pass_match' => '!\\[hr\\]\\[/hr\\]!i',
-				'first_pass_replace' => '[hr:$uid][/hr:$uid]',
-				'second_pass_match' => '[hr:$uid][/hr:$uid]',
-				'second_pass_replace' => ''
+				'first_pass_match' => '!\\[hr\\]!i',
+				'first_pass_replace' => '[hr:$uid]',
+				'second_pass_match' => '!\\[hr:$uid\\]!s',
+				'second_pass_replace' => '<hr />'
 			),
 			array( // row #16
 				'bbcode_id' => ++$style_ids,

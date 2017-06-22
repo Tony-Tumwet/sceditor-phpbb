@@ -5,7 +5,7 @@
 ## How to install ##
 * copy folder cosmo/ to {PHPBB_ROOT}/ext/
 
-###### It should have following path:
+### It should have following path:
 * {PHPBB_ROOT}/ext/
 	* cosmo/
 		* sceditor/
@@ -14,4 +14,5 @@
 
 * Originally extension was compatible to 3.1.x but you can use it for 3.2.x too (but its still testing)
 
-[Thanks to](docs/thanks.md)
+## Special thanks to...
+Jörg from [Englisch-Hilfen](http://www.englisch-hilfen.de) who ordered the improvements for this extension and allowed me to make them Open Source.

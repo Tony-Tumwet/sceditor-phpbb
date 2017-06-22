@@ -246,11 +246,11 @@ class bbcodedata extends \phpbb\db\migration\migration
 				'bbcode_helpline' => '',
 				'display_on_posting' => 0,
 				'bbcode_match' => '[youtube]{SIMPLETEXT}[/youtube]',
-				'bbcode_tpl' => '<iframe width="560" height="315" src="http://www.youtube.com/embed/{SIMPLETEXT}?wmode=opaque" data-youtube-id="{SIMPLETEXT}" frameborder="0" allowfullscreen></iframe>',
+				'bbcode_tpl' => '<iframe width="560" height="315" src="https://www.youtube.com/embed/{SIMPLETEXT}?wmode=opaque" data-youtube-id="{SIMPLETEXT}" frameborder="0" allowfullscreen></iframe>',
 				'first_pass_match' => '!\\[youtube\\]([a-zA-Z0-9-+.,_ ]+)\\[/youtube\\]!i',
 				'first_pass_replace' => '[youtube:$uid]${1}[/youtube:$uid]',
 				'second_pass_match' => '!\\[youtube:$uid\\]([a-zA-Z0-9-+.,_ ]+)\\[/youtube:$uid\\]!s',
-				'second_pass_replace' => '<iframe width="560" height="315" src="http://www.youtube.com/embed/${1}?wmode=opaque" data-youtube-id="${1}" frameborder="0" allowfullscreen></iframe>'
+				'second_pass_replace' => '<iframe width="560" height="315" src="https://www.youtube.com/embed/${1}?wmode=opaque" data-youtube-id="${1}" frameborder="0" allowfullscreen></iframe>'
 			),
 			array( // row #17
 				'bbcode_id' => ++$style_ids,

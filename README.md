@@ -7,11 +7,11 @@
 
 ###### It should have following path:
 * {PHPBB_ROOT}/ext/
-** cosmo/
-*** sceditor/
+	* cosmo/
+		* sceditor/
 
 ## Compatibility ##
 
 * Originally extension was compatible to 3.1.x but you can use it for 3.2.x too (but its still testing)
 
-![Thanks to...](docs/thanks.md)
+[Thanks to](docs/thanks.md)

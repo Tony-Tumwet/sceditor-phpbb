@@ -3,7 +3,7 @@
  *
  * @author    Tekin Birdüzen <t.birduezen@web-coding.eu>
  * @since     09.06.15
- * @version   1.7.8
+ * @version   1.7.9
  * @copyright Tekin Birdüzen
  * @copyright (c) 2014 ForumHulp.com
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
@@ -49,13 +49,15 @@ class bbcodedata extends \phpbb\db\migration\migration
 		$result = $this->db->sql_query($sql);
 
 		$style_ids = 0;
-		if ($styles_row = $this->db->sql_fetchrow()) {
+		if ($styles_row = $this->db->sql_fetchrow()) 
+		{
 			$style_ids = $styles_row['max_id'];
 		}
 		$this->db->sql_freeresult($result);
 
 		// Make sure we don't start too low
-		if ($style_ids <= NUM_CORE_BBCODES) {
+		if ($style_ids <= NUM_CORE_BBCODES) 
+		{
 			$style_ids = NUM_CORE_BBCODES;
 		}
 
@@ -246,11 +248,11 @@ class bbcodedata extends \phpbb\db\migration\migration
 				'bbcode_helpline' => '',
 				'display_on_posting' => 0,
 				'bbcode_match' => '[youtube]{SIMPLETEXT}[/youtube]',
-				'bbcode_tpl' => '<iframe width="560" height="315" src="http://www.youtube.com/embed/{SIMPLETEXT}?wmode=opaque" data-youtube-id="{SIMPLETEXT}" frameborder="0" allowfullscreen></iframe>',
+				'bbcode_tpl' => '<iframe width="560" height="315" src="https://www.youtube.com/embed/{SIMPLETEXT}?wmode=opaque" data-youtube-id="{SIMPLETEXT}" frameborder="0" allowfullscreen></iframe>',
 				'first_pass_match' => '!\\[youtube\\]([a-zA-Z0-9-+.,_ ]+)\\[/youtube\\]!i',
 				'first_pass_replace' => '[youtube:$uid]${1}[/youtube:$uid]',
 				'second_pass_match' => '!\\[youtube:$uid\\]([a-zA-Z0-9-+.,_ ]+)\\[/youtube:$uid\\]!s',
-				'second_pass_replace' => '<iframe width="560" height="315" src="http://www.youtube.com/embed/${1}?wmode=opaque" data-youtube-id="${1}" frameborder="0" allowfullscreen></iframe>'
+				'second_pass_replace' => '<iframe width="560" height="315" src="https://www.youtube.com/embed/${1}?wmode=opaque" data-youtube-id="${1}" frameborder="0" allowfullscreen></iframe>'
 			),
 			array( // row #17
 				'bbcode_id' => ++$style_ids,
@@ -277,7 +279,8 @@ class bbcodedata extends \phpbb\db\migration\migration
 				'second_pass_replace' => '<div style="direction: ltr;">${1}</div>'
 			)
 		);
-		foreach ($phpbb_bbcodes as $eee) {
+		foreach ($phpbb_bbcodes as $eee) 
+		{
 			$sql = 'INSERT INTO ' . $this->table_prefix . 'bbcodes' . $this->db->sql_build_array('INSERT', $eee);
 			$this->db->sql_query($sql);
 		}

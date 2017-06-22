@@ -70,13 +70,15 @@ class parser implements EventSubscriberInterface
 		$this->bbcode = $event['params_array'][1];
 		$in = str_replace("\r\n", "\n", str_replace('\"', '"', trim($in)));
 
-		if (!$in) {
+		if (!$in) 
+		{
 			$event['return'] = '';
 			return;
 		}
 
 		$out = $in;
-		do {
+		do 
+		{
 			$in = $out;
 			$out = preg_replace('/\[color=(#[0-9a-f]{3}|#[0-9a-f]{6}|[a-z\-]+)\]((?:.(?!\[color=(#[0-9a-f]{3}|#[0-9a-f]{6}|[a-z\-]+)\]))*?)\[\/color\]/is', '[color=$1:' . $this->bbcode->bbcode_uid . ']$2[/color:' . $this->bbcode->bbcode_uid . ']', $in);
 			$out = preg_replace('/\[size=([0-9]+)\]((?:.(?!\[size=([0-9]+)\]))*?)\[\/size\]/is', '[size=$1:' . $this->bbcode->bbcode_uid . ']$2[/size:' . $this->bbcode->bbcode_uid . ']', $out);
@@ -96,7 +98,8 @@ class parser implements EventSubscriberInterface
 		$this->bbcode_id = $event['params_array'][2];
 
 		// open or close?
-		switch ($mode) {
+		switch ($mode) 
+		{
 			case 'color_open':
 				// These two variables are not really needed
 				// It's just to make clear what they are for
@@ -121,7 +124,8 @@ class parser implements EventSubscriberInterface
 	private function bbcode_second_pass_open($bbcode, $arg_val, $text)
 	{
 		// Already got the part?
-		if (!is_string($this->color_open) || !is_string($this->size_open)) {
+		if (!is_string($this->color_open) || !is_string($this->size_open)) 
+		{
 			$this->get_tpl_parts();
 		}
 
@@ -130,7 +134,8 @@ class parser implements EventSubscriberInterface
 		$text = str_replace('\"', '"', $text);
 
 		// remove newline at the beginning
-		if ("\n" === $text) {
+		if ("\n" === $text) 
+		{
 			$text = '';
 		}
 		$text = str_replace('$1', $arg_val, ($bbcode == 'color' ? $this->color_open : $this->size_open)) . $text;
@@ -141,7 +146,8 @@ class parser implements EventSubscriberInterface
 	private function bbcode_second_pass_close($bbcode)
 	{
 		// Already got the parts?
-		if (!is_string($this->color_close) || !is_string($this->size_close)) {
+		if (!is_string($this->color_close) || !is_string($this->size_close)) 
+		{
 			$this->get_tpl_parts();
 		}
 

@@ -49,13 +49,15 @@ class bbcodedata extends \phpbb\db\migration\migration
 		$result = $this->db->sql_query($sql);
 
 		$style_ids = 0;
-		if ($styles_row = $this->db->sql_fetchrow()) {
+		if ($styles_row = $this->db->sql_fetchrow()) 
+		{
 			$style_ids = $styles_row['max_id'];
 		}
 		$this->db->sql_freeresult($result);
 
 		// Make sure we don't start too low
-		if ($style_ids <= NUM_CORE_BBCODES) {
+		if ($style_ids <= NUM_CORE_BBCODES) 
+		{
 			$style_ids = NUM_CORE_BBCODES;
 		}
 
@@ -277,7 +279,8 @@ class bbcodedata extends \phpbb\db\migration\migration
 				'second_pass_replace' => '<div style="direction: ltr;">${1}</div>'
 			)
 		);
-		foreach ($phpbb_bbcodes as $eee) {
+		foreach ($phpbb_bbcodes as $eee) 
+		{
 			$sql = 'INSERT INTO ' . $this->table_prefix . 'bbcodes' . $this->db->sql_build_array('INSERT', $eee);
 			$this->db->sql_query($sql);
 		}

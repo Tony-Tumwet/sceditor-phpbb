@@ -14,105 +14,51 @@ namespace cosmo\sceditor\migrations;
 
 class bbcodedata extends \phpbb\db\migration\migration
 {
-	
+
 	public function update_data()
 	{
 		return array(
-			array(
-				'custom',
-				array(
-					array(
-						$this,
-						'addbbcode'
-					)
-				)
-			)
+			array('custom', array(array($this, 'addbbcode'))),
 		);
 	}
-	
+
 	public function revert_data()
 	{
 		return array(
-			array(
-				'custom',
-				array(
-					array(
-						$this,
-						'removebbcode'
-					)
-				)
-			)
+			array('custom', array(array($this, 'removebbcode'))),
 		);
 	}
-	
+
 	public function removebbcode()
 	{
-		$bbcodedata = array(
-			'li',
-			'ul',
-			's',
-			'sub',
-			'sup',
-			'left',
-			'right',
-			'center',
-			'justify',
-			'font=',
-			'ol',
-			'table',
-			'td',
-			'tr',
-			'hr',
-			'youtube',
-			'rtl',
-			'ltr'
-		);
-		
+		$bbcodedata = array('li', 'ul', 's', 'sub', 'sup', 'left', 'right', 'center', 'justify', 'font=', 'ol', 'table', 'td', 'tr', 'hr', 'youtube', 'rtl', 'ltr',);
+
 		$sql = 'DELETE FROM ' . $this->table_prefix . 'bbcodes WHERE ' . $this->db->sql_in_set('bbcode_tag', $bbcodedata);
 		$this->db->sql_query($sql);
 	}
-	
+
 	public function addbbcode()
 	{
-		$bbcodedata = array(
-			'li',
-			'ul',
-			's',
-			'sub',
-			'sup',
-			'left',
-			'right',
-			'center',
-			'justify',
-			'font=',
-			'ol',
-			'table',
-			'td',
-			'tr',
-			'hr',
-			'youtube',
-			'rtl',
-			'ltr'
-		);
-		
+		$bbcodedata = array('li', 'ul', 's', 'sub', 'sup', 'left', 'right', 'center', 'justify', 'font=', 'ol', 'table', 'td', 'tr', 'hr', 'youtube', 'rtl', 'ltr',);
+
 		$sql = 'DELETE FROM ' . $this->table_prefix . 'bbcodes WHERE ' . $this->db->sql_in_set('bbcode_tag', $bbcodedata);
 		$this->db->sql_query($sql);
-		
-		$sql    = 'SELECT MAX(bbcode_id) AS max_id
+
+		$sql = 'SELECT MAX(bbcode_id) AS max_id
     				FROM ' . $this->table_prefix . 'bbcodes';
 		$result = $this->db->sql_query($sql);
-		
+
 		$style_ids = 0;
 		if ($styles_row = $this->db->sql_fetchrow()) {
 			$style_ids = $styles_row['max_id'];
 		}
 		$this->db->sql_freeresult($result);
-		
+
 		// Make sure we don't start too low
 		if ($style_ids <= NUM_CORE_BBCODES) {
 			$style_ids = NUM_CORE_BBCODES;
 		}
-		
+
 		$phpbb_bbcodes = array(
 			array( // row #1
 				'bbcode_id' => ++$style_ids,

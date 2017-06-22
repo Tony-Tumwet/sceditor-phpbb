@@ -3,7 +3,7 @@
  *
  * @author Tekin Birdüzen <t.birduezen@web-coding.eu>
  * @since 09.06.15
- * @version 1.7.8
+ * @version 1.7.8.1
  * @copyright Tekin Birdüzen
  */
 

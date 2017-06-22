@@ -1,4 +1,4 @@
-# [![Build Status](https://travis-ci.org/cYbercOsmOnauT/wysiwygsceditorphpbb.svg?branch=master)](https://travis-ci.org/cYbercOsmOnauT/wysiwygsceditorphpbb) WYSIWYG Editor for phpBB 3.2.x 
+# WYSIWYG Editor for phpBB 3.2.x [![Build Status](https://travis-ci.org/cYbercOsmOnauT/wysiwygsceditorphpbb.svg?branch=master)](https://travis-ci.org/cYbercOsmOnauT/wysiwygsceditorphpbb)
 
 ## How to install
 * copy folder cosmo/ to {PHPBB_ROOT}/ext/

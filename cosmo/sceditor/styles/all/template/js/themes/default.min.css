@@ -474,7 +474,7 @@ div.sceditor-group {
     width: 99% !important;
     margin-left: 0.5%;
 }
-div.postbody table tr td {
-    border: 1px solid black;
-    padding: 5px;
+table tr td {
+	border: 1px solid black;
+	padding: 5px;
 }

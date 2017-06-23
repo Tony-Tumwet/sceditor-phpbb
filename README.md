@@ -1,11 +1,17 @@
 # WYSIWYG Editor for phpBB 3.2.x [![Build Status](https://travis-ci.org/cYbercOsmOnauT/wysiwygsceditorphpbb.svg?branch=master)](https://travis-ci.org/cYbercOsmOnauT/wysiwygsceditorphpbb)
 
+A simple WYSIWYG Editor for phpBB 3.1.x / 3.2.x which was created by nassim99. [Post from phpBB at Mar 28, 2015](https://www.phpbb.com/community/viewtopic.php?f=501&t=2307121)
+
+### Editable textarea
 ![Example of editor](docs/example.png)
 
-## How to install ##
-* copy folder cosmo/ to {PHPBB_ROOT}/ext/
+### Preview
+![Example of preview](docs/example2.png)
 
-### It should have following path:
+## How to install
+* Just copy folder cosmo/ to {PHPBB_ROOT}/ext/
+
+#### It should have following path:
 * {PHPBB_ROOT}/ext/cosmo/sceditor/
 	* config/
 		* services.yml

@@ -371,7 +371,7 @@ div.sceditor-group {
 .sceditor-button {
     float: left;
     cursor: pointer;
-    padding: 3px 5px;
+    padding: 3px 4.8px;
     width: 16px;
     height: 20px;
     border-radius: 3px;
@@ -469,7 +469,16 @@ div.sceditor-group {
     width: 99% !important;
     margin-left: 0.5%;
 }
+table {
+    margin-top: 10px;
+	margin-bottom: 10px;
+}
 table tr td {
-	border: 1px solid black;
-	padding: 5px;
+	border: 2px solid black;
+	border-style: outset;
+	padding: 13px 20px 13px 20px;
+	text-align: center;
+}
+table tr:hover {
+	background-color:#C8C8C8;
 }

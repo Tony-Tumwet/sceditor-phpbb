@@ -6,7 +6,8 @@
   "version": "1.8.0",
   "time": "2017-06-22",
   "license": "GPL-2.0",
-  "authors": [
+  "authors": 
+  [
     {
       "name": "Tekin Birdüzen",
       "email": "t.birduezen@web-coding.eu",
@@ -17,20 +18,31 @@
       "name": "Nassim Redwan",
       "email": "redoin10@gmail.com",
       "role": "owner"
+    },
+	{
+	  "name": "Peter Stein",
+	  "email": "peter.stein@de.ibm.com",
+	  "homepage": "https://service-exilium.de/",
+	  "role": "Developer"
     }
   ],
-  "require": {
+  "require": 
+  {
     "php": ">=5.4"
   },
-  "require-dev": {
+  "require-dev": 
+  {
     "phpbb/epv": "dev-master"
   },
-  "extra": {
+  "extra": 
+  {
     "display-name": "phpbb 3.2 WYSIWYG BBCode Editor",
-    "soft-require": {
+    "soft-require": 
+	{
       "phpbb/phpbb": ">=3.1.5,<=3.2@dev"
     },
-    "version-check": {
+    "version-check": 
+	{
       "host": "www.web-coding.eu",
       "directory": "/phpbb-extensions",
       "filename": "wysiwyg.json"

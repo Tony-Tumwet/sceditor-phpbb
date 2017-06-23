@@ -1,6 +1,8 @@
 <!-- IF S_SCEDITOR -->
 <!-- INCLUDEJS @cosmo_sceditor/js/jquery.sceditor.bbcode.min.js -->
-<!-- IF L_SCEDITOR_LANG --><!-- INCLUDEJS @cosmo_sceditor/js/languages/{L_SCEDITOR_LANG}.js --><!-- ENDIF -->
+<!-- IF L_SCEDITOR_LANG -->
+<!-- INCLUDEJS @cosmo_sceditor/js/languages/{L_SCEDITOR_LANG}.js -->
+<!-- ENDIF -->
 <script type="text/javascript">
 	var sceController = (function ($, undefined) {
 		var _sourceButton, _sourceButtonAvailable,
@@ -228,7 +230,7 @@
 					<!-- IF S_QUICK_REPLY -->
 					toolbar: "bold,italic,underline,strike|code,quote,removeformat|source",
 					<!-- ELSE -->
-					toolbarExclude: "emoticon",
+					//toolbarExclude: "emoticon",
 					<!-- ENDIF -->
 					<!-- IF S_SMILIES_ALLOWED -->
 					emoticonsRoot: "{U_EMOTICONS_ROOT}",

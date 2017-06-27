@@ -1,10 +1,10 @@
 <?php
 /**
  *
- * @author Tekin Birdüzen <t.birduezen@web-coding.eu>
- * @since 09.06.15
- * @version 1.7.9
- * @copyright Tekin Birdüzen
+ * @author      Tekin Birdüzen <t.birduezen@web-coding.eu>
+ * @since       09.06.15
+ * @version     1.8.2
+ * @copyright   Tekin Birdüzen
  */
 
 namespace cosmo\sceditor\event;

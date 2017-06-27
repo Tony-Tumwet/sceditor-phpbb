@@ -31,7 +31,7 @@ class bbcodedata extends \phpbb\db\migration\migration
 
 	public function removebbcode()
 	{
-		$bbcodedata = array('li', 'ul', 's', 'sub', 'sup', 'left', 'right', 'center', 'justify', 'font=', 'ol', 'table', 'td', 'tr', 'hr', 'youtube', 'rtl', 'ltr',);
+		$bbcodedata = array('li', 'ul', 's', 'sub', 'sup', 'left', 'right', 'center', 'justify', 'font=', 'ol', 'table', 'td', 'tr', 'hr', 'youtube', 'rtl', 'img', 'ltr',);
 
 		$sql = 'DELETE FROM ' . $this->table_prefix . 'bbcodes WHERE ' . $this->db->sql_in_set('bbcode_tag', $bbcodedata);
 		$this->db->sql_query($sql);
@@ -39,7 +39,7 @@ class bbcodedata extends \phpbb\db\migration\migration
 
 	public function addbbcode()
 	{
-		$bbcodedata = array('li', 'ul', 's', 'sub', 'sup', 'left', 'right', 'center', 'justify', 'font=', 'ol', 'table', 'td', 'tr', 'hr', 'youtube', 'rtl', 'ltr',);
+		$bbcodedata = array('li', 'ul', 's', 'sub', 'sup', 'left', 'right', 'center', 'justify', 'font=', 'ol', 'table', 'td', 'tr', 'hr', 'youtube', 'rtl', 'img', 'ltr',);
 
 		$sql = 'DELETE FROM ' . $this->table_prefix . 'bbcodes WHERE ' . $this->db->sql_in_set('bbcode_tag', $bbcodedata);
 		$this->db->sql_query($sql);
@@ -266,7 +266,19 @@ class bbcodedata extends \phpbb\db\migration\migration
 				'second_pass_match' => '!\\[rtl:$uid\\](.*?)\\[/rtl:$uid\\]!s',
 				'second_pass_replace' => '<div style="direction: rtl;">${1}</div>'
 			),
-			array( // row #18
+            array( // row #18
+				'bbcode_id' => ++$style_ids,
+				'bbcode_tag' => 'img=',
+				'bbcode_helpline' => '',
+				'display_on_posting' => 0,
+				'bbcode_match' => '[img={NUMBER1}x{NUMBER2}]{URL}[/img]',
+				'bbcode_tpl' => '<img src="{URL}" style="width: {NUMBER1}px;height: {NUMBER2}px;" />',
+				'first_pass_match' => '!\[img\=([0-9]+)x([0-9]+)\](.*?)[/img\]!iue',
+				'first_pass_replace' => '[img=${1}x${2}:$uid]${3}[/img:$uid]',
+				'second_pass_match' => '!\[img\=([0-9]+)x([0-9]+):$uid\](.*?)[/img:$uid\]!su',
+				'second_pass_replace' => '<img src="${3}" style="width: ${1}px;height: ${2}px;" />'
+			),
+			array( // row #19
 				'bbcode_id' => ++$style_ids,
 				'bbcode_tag' => 'ltr',
 				'bbcode_helpline' => '',

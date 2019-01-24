@@ -1,7 +1,7 @@
-(function ($) {
+(function () {
 	'use strict';
 
-	$.sceditor.locale['uk'] = {
+	sceditor.locale['uk'] = {
 		'Bold': 'Жирний',
 		'Italic': 'Курсив',
 		'Underline': 'Підкреслений',
@@ -29,7 +29,7 @@
 		'Undo': 'Відмінити',
 		'Redo': 'Повторити',
 		'Rows:': 'Рядків:',
-		'Cols:': 'Колонок:',
+		'Cols:': 'Cтовпців:',
 		'Insert a table': 'Додати таблицю',
 		'Insert a horizontal rule': 'Додати горизонтальну лінію',
 		'Code': 'Код',
@@ -54,4 +54,4 @@
 		'Maximize': 'Розгорнути редактор',
 		dateFormat: 'day.month.year'
 	};
-})(jQuery);
+})();

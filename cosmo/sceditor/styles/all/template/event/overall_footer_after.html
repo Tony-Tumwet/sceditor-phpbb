@@ -1,10 +1,12 @@
 <!-- IF S_SCEDITOR -->
 <!-- INCLUDEJS @cosmo_sceditor/js/jquery.sceditor.bbcode.min.js -->
+
 <!-- IF L_SCEDITOR_LANG -->
 <!-- INCLUDEJS @cosmo_sceditor/js/languages/{L_SCEDITOR_LANG}.js -->
 <!-- ENDIF -->
+
 <script type="text/javascript">
-	var sceController = (function ($, undefined) {
+	var sceController = (function ($) {
 		var _sourceButton, _sourceButtonAvailable,
 				_textarea,
 		<!-- IF S_SMILIES_ALLOWED -->
@@ -124,9 +126,9 @@
 							/**
 							 *  I dont use
 							 *  if (-1 !== $.inArray(0, [path.indexOf('/'), path.indexOf('http://'), path.indexOf('https://'), path.length])) {
-						 *  because all indexOf and the length have to be calculated before the check starts.
-						 *  The "normal" version is faster.
-						 */
+						     *  because all indexOf and the length have to be calculated before the check starts.
+						     *  The "normal" version is faster.
+						     */
 							// Do we really have to do something?
 							if (0 === _path.length) {
 								// No path info.. nothing to do
@@ -204,7 +206,8 @@
 			},
 			'getTextarea': function () {
 				if (typeof _textarea === 'undefined' || !_textarea.length) {
-					_textarea = $('textarea[name="message"]');
+					//_textarea = $('textarea[name="message"]');
+					_textarea = document.getElementById('message');
 				}
 				return _textarea;
 			},
@@ -224,14 +227,16 @@
                 } else {
                     maxWidth = parseInt(maxWidth) - 30;
                 }
-                _textarea.sceditor({
-				    width: maxWidth,
-					plugins: "bbcode",
+
+                sceditor.create(_textarea, {
+                    format: 'bbcode',
+                    //icons: 'material',
+                    width: maxWidth,
 					<!-- IF S_QUICK_REPLY -->
-					toolbar: "bold,italic,underline,strike|code,quote,removeformat|source",
-					<!-- ELSE -->
-					//toolbarExclude: "emoticon",
-					<!-- ENDIF -->
+					toolbar: 'bold,italic,underline,strike|code,quote,removeformat|source',
+                    <!-- ELSE -->
+                    toolbarExclude : 'date,time,print,print,ltr,rtl,font',
+                    <!-- ENDIF -->
 					<!-- IF S_SMILIES_ALLOWED -->
 					emoticonsRoot: "{U_EMOTICONS_ROOT}",
 					emoticons: {
@@ -253,12 +258,13 @@
                 var scEditorMain = $('.sceditor-container:eq(0)');
 				scEditorMain.css('z-index', 1).attr('id', 'sceditor-main-div');
 				scEditorMain.find('textarea').attr('id', 'message').attr('name', 'message').addClass('inputbox');
-                var parser = new $.sceditor.BBCodeParser();
+                var parser = new sceditor.BBCodeParser();
                 $('#notification_list').css('z-index', 20);
 
 				// Set used nodes (mostly checkboxes)
-				_sceInstance = _textarea.sceditor('instance');
-				
+				//_sceInstance = _textarea.sceditor('instance');
+                _sceInstance = sceditor.instance(_textarea);
+
 				if (height >= 400) {
                     _sceInstance.bind('keyup', function() {
                         if (_sceInstance.inSourceMode()) {
@@ -268,14 +274,16 @@
                             _sceInstance.updateOriginal();
                         }
                     });
+
                     $('input[name="preview"]').on('click', function() {
                         _sceInstance.sourceMode(true);
                     });
+
                     $('input[name="post"]').on('click', function() {
                         _sceInstance.sourceMode(true);
                     });
                 }
-				
+
 				// Initialize the availability of the SCEditor source button
 				_internalMethods.sourceButton.init();
 				<!-- IF S_BBCODE_ALLOWED -->
@@ -314,5 +322,6 @@
 		}
 	})(jQuery);
 </script>
+
 <!-- INCLUDEJS @cosmo_sceditor/js/sce.js -->
 <!-- ENDIF -->

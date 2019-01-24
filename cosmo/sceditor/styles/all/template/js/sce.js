@@ -1,6 +1,7 @@
 var sizes = ['25', '50', '75', '100', '150', '175', '200'],
 	textarea;
-$.sceditor.plugins.bbcode.bbcode.set('size', {
+
+sceditor.formats.bbcode.set('size', {
 	format: function ($elem, content) {
 		var fontSize,
 			sizesIdx = 0,
@@ -54,7 +55,7 @@ $.sceditor.plugins.bbcode.bbcode.set('size', {
 	}
 });
 
-$.sceditor.command.set('size', {
+sceditor.command.set('size', {
 	_dropDown: function (editor, caller, callback) {
 		var content = $('<div />'),
 			clickFunc = function (e) {
@@ -77,7 +78,7 @@ $.sceditor.command.set('size', {
 	txtExec: function (caller) {
 		var editor = this;
 
-		$.sceditor.command.get('size')._dropDown(
+		sceditor.command.get('size')._dropDown(
 			editor,
 			caller,
 			function (sizesIdx) {
@@ -95,7 +96,7 @@ $.sceditor.command.set('size', {
 	}
 });
 
-$.sceditor.plugins.bbcode.bbcode.set('quote', {
+sceditor.formats.bbcode.set('quote', {
 	format: function (element, content) {
 		var author = '',
 			$element = $(element),
@@ -137,7 +138,8 @@ $.sceditor.plugins.bbcode.bbcode.set('quote', {
 
 // This is needed for the smilies popup
 function setSmilie(tag) {
-	textarea.data('sceditor').insert(' ' + tag + ' ');
+	//textarea.data('sceditor').insert(' ' + tag + ' ');
+	sceditor.instance(textarea).insert(' ' + tag + ' ');
 }
 
 $(function () {
@@ -147,7 +149,6 @@ $(function () {
 	// Hide the normal BBCode Buttons
 	$('#format-buttons').hide();
 	$('#smiley-box a img').each(function () {
-
 		$(this).click(function () {
 			setSmilie($(this).attr('alt'));
 			return false;
@@ -161,6 +162,7 @@ $(function () {
 		var attachId = $(this).parents('.attach-row').attr('data-attach-id'),
 			index = phpbb.plupload.getIndex(attachId),
 			textinsert = '[attachment=' + index + ']' + phpbb.plupload.data[index].real_filename + '[/attachment]';
-		textarea.data('sceditor').insert(textinsert);
+		//textarea.data('sceditor').insert(textinsert);
+		sceditor.instance(textarea).insert(textinsert);
 	});
 });

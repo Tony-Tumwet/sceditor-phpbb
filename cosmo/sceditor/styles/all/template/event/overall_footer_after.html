@@ -235,7 +235,7 @@
 					<!-- IF S_QUICK_REPLY -->
 					toolbar: 'bold,italic,underline,strike|code,quote,removeformat|source',
                     <!-- ELSE -->
-                    toolbarExclude : 'date,time,print,print,ltr,rtl,font',
+                    toolbarExclude : 'date,time,print,print,ltr,rtl,font,email',
                     <!-- ENDIF -->
 					<!-- IF S_SMILIES_ALLOWED -->
 					emoticonsRoot: "{U_EMOTICONS_ROOT}",
@@ -254,18 +254,21 @@
 
 				// Fix the position of the editor layer
 				$('#message').hide();
-                $('#smiley-box').remove();
+                $('#smiley-box').hide();
+                /*
                 var scEditorMain = $('.sceditor-container:eq(0)');
 				scEditorMain.css('z-index', 1).attr('id', 'sceditor-main-div');
 				scEditorMain.find('textarea').attr('id', 'message').attr('name', 'message').addClass('inputbox');
-                var parser = new sceditor.BBCodeParser();
                 $('#notification_list').css('z-index', 20);
+                */
 
 				// Set used nodes (mostly checkboxes)
 				//_sceInstance = _textarea.sceditor('instance');
                 _sceInstance = sceditor.instance(_textarea);
 
 				if (height >= 400) {
+                    var parser = new sceditor.BBCodeParser();
+
                     _sceInstance.bind('keyup', function() {
                         if (_sceInstance.inSourceMode()) {
                             _sceInstance.updateOriginal();

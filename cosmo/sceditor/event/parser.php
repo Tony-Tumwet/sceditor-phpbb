@@ -37,7 +37,7 @@ class parser implements EventSubscriberInterface
 	public function initialize_fp($event)
 	{
 		$new_color = $event['bbcodes'];
-		$new_color['size'] = array('bbcode_id' => 5, 'regexp' => array('!\[size=([0-9]+)\](.+)\[/size\]!uise' => "\$this->validate_bbcode_by_extension('\$0', \$this)"));
+		//$new_color['size'] = array('bbcode_id' => 5, 'regexp' => array('!\[size=([0-9]+)\](.+)\[/size\]!uise' => "\$this->validate_bbcode_by_extension('\$0', \$this)"));
 		$new_color['color'] = array('bbcode_id' => 6, 'regexp' => array('!\[color=(#[0-9a-f]{3}|#[0-9a-f]{6}|[a-z\-]+)\](.+)\[/color\]!uise' => "\$this->validate_bbcode_by_extension('\$0', \$this)"));
 
 		$event['bbcodes'] = $new_color;
@@ -46,12 +46,16 @@ class parser implements EventSubscriberInterface
 	public function initialize_sp($event)
 	{
 		$tmp = $event['bbcode_cache'];
+
+		/*
 		$tmp[5] = array(
 			'preg' => array(
 				'/\[size=([0-9]+):$uid\]((?!\[size=([0-9]+):$uid\]).)?/ise' => "\$this->bbcode_second_pass_by_extension('size_open', \$this,  \$bbcode_id, '\$1', '\$2')",
 				'/\[\/size:$uid\]/ie' => "\$this->bbcode_second_pass_by_extension('size_close', \$this, \$bbcode_id)"
 			)
 		);
+		*/
+
 		$tmp[6] = array(
 			'preg' => array(
 				'/\[color=(#[0-9a-f]{3}|#[0-9a-f]{6}|[a-z\-]+):$uid\]((?!\[color=(#[0-9a-f]{3}|#[0-9a-f]{6}|[a-z\-]+):$uid\]).)?/ise' => "\$this->bbcode_second_pass_by_extension('color_open', \$this,  \$bbcode_id, '\$1', '\$2')",
@@ -81,7 +85,7 @@ class parser implements EventSubscriberInterface
 		{
 			$in = $out;
 			$out = preg_replace('/\[color=(#[0-9a-f]{3}|#[0-9a-f]{6}|[a-z\-]+)\]((?:.(?!\[color=(#[0-9a-f]{3}|#[0-9a-f]{6}|[a-z\-]+)\]))*?)\[\/color\]/is', '[color=$1:' . $this->bbcode->bbcode_uid . ']$2[/color:' . $this->bbcode->bbcode_uid . ']', $in);
-			$out = preg_replace('/\[size=([0-9]+)\]((?:.(?!\[size=([0-9]+)\]))*?)\[\/size\]/is', '[size=$1:' . $this->bbcode->bbcode_uid . ']$2[/size:' . $this->bbcode->bbcode_uid . ']', $out);
+			//$out = preg_replace('/\[size=([0-9]+)\]((?:.(?!\[size=([0-9]+)\]))*?)\[\/size\]/is', '[size=$1:' . $this->bbcode->bbcode_uid . ']$2[/size:' . $this->bbcode->bbcode_uid . ']', $out);
 		} while ($out !== $in);
 
 		$event['return'] = $out;
@@ -110,6 +114,8 @@ class parser implements EventSubscriberInterface
 			case 'color_close':
 				$event['return'] = $this->bbcode_second_pass_close('color');
 				break;
+
+				/*
 			case 'size_open':
 				$size = $event['params_array'][3];
 				$text = $event['params_array'][4];
@@ -118,6 +124,7 @@ class parser implements EventSubscriberInterface
 			case 'size_close':
 				$event['return'] = $this->bbcode_second_pass_close('size');
 				break;
+				*/
 		}
 	}
 
@@ -162,9 +169,11 @@ class parser implements EventSubscriberInterface
 		$this->color_close = substr($tpl, $strpos + 2);
 
 		// Same with size
+        /*
 		$tpl = $this->bbcode->bbcode_tpl('size', $this->bbcode_id);
 		$strpos = strpos($tpl, '$2');
 		$this->size_open = substr($tpl, 0, $strpos);
 		$this->size_close = substr($tpl, $strpos + 2);
+        */
 	}
 }

@@ -2,13 +2,13 @@ var sizes = ['25', '50', '75', '100', '150', '175', '200'],
 	textarea;
 
 sceditor.formats.bbcode.set('size', {
-	format: function ($elem, content) {
+	format: function (element, content) {
 		var fontSize,
 			sizesIdx = 0,
-			size = $elem.data('scefontsize');
+			size = sceditor.dom.attr(element, 'scefontsize');
 
 		if (!size) {
-			fontSize = $elem.css('fontSize');
+			fontSize = sceditor.dom.css(element,'fontSize');
 
 			// Most browsers return px value but IE returns 1-7
 			if (fontSize.indexOf('px') > -1) {
@@ -56,25 +56,73 @@ sceditor.formats.bbcode.set('size', {
 });
 
 sceditor.command.set('size', {
+	/*
+	// esto es por si quiero ponerle nombres a los tamaños de fuente en lugar de numeros
+	function is(node, selector) {
+		var result = false;
+
+		if (node && node.nodeType === 1) {
+			result = (node.matches || node.msMatchesSelector ||
+				node.webkitMatchesSelector).call(node, selector);
+		}
+
+		return result;
+	}
+
+	function on(node, events, selector, fn, capture) {
+		events.split(' ').forEach(function (event) {
+			var handler;
+
+				handler = fn['_sce-event-' + event + selector] || function (e) {
+					var target = e.target;
+					while (target && target !== node) {
+						if (is(target, selector)) {
+							fn.call(target, e);
+							return;
+						}
+
+						target = target.parentNode;
+					}
+				};
+
+				fn['_sce-event-' + event + selector] = handler;
+
+
+			node.addEventListener(event, handler, capture || false);
+		});
+	}
+
 	_dropDown: function (editor, caller, callback) {
-		var content = $('<div />'),
-			clickFunc = function (e) {
-				callback($(this).data('size'));
-				editor.closeDropDown(true);
-				e.preventDefault();
-			},
-			size;
+		var content = document.createElement('div');
+
+		on(content, 'click', 'a', function (e) {
+			callback($(this).data('size'));
+			editor.closeDropDown(true);
+			e.preventDefault();
+		});
 
 		for (var i = 1; i < 7; i++) {
 			// Only consider maxsize when set greater 0
 			if (sceController.isMaxFontsizeSet && sizes[i - 1] > sceController.getMaxFontsize) {
 				break;
 			}
-			content.append($('<a class="sceditor-fontsize-option" data-size="' + i + '" href="#"><font size="' + i + '">' + i + '</font></a>').click(clickFunc));
+
+			var html = '<a class="sceditor-fontsize-option" data-size="' + i + '" href="#"><font size="' + i + '">' + i + '</font></a>';
+
+			var tmp = document.createElement('div');
+			tmp.innerHTML = html;
+
+			var	ret = document.createDocumentFragment();
+			while (tmp.firstChild) {
+				ret.appendChild(tmp.firstChild);
+			}
+
+			content.appendChild(ret);
 		}
 
 		editor.createDropDown(caller, 'fontsize-picker', content);
 	},
+	*/
 	txtExec: function (caller) {
 		var editor = this;
 
@@ -90,13 +138,18 @@ sceditor.command.set('size', {
 					sizesIdx = 0;
 				}
 
-				editor.insertText('[size=' + sizes[sizesIdx] + ']', '[/size]');
+				editor.insertText(
+					'[size=' + sizes[sizesIdx] + ']',
+					'[/size]'
+				);
 			}
 		);
 	}
 });
 
+
 sceditor.formats.bbcode.set('quote', {
+	/*
 	format: function (element, content) {
 		var author = '',
 			$element = $(element),
@@ -116,6 +169,7 @@ sceditor.formats.bbcode.set('quote', {
 
 		return '[quote' + author + ']' + content + '[/quote]';
 	},
+	*/
 	html: function (token, attrs, content) {
 		var addition = '';
 

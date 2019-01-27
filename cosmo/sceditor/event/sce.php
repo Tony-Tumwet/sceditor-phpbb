@@ -63,6 +63,7 @@ class sce implements EventSubscriberInterface
 		{
 			$this->template->assign_var('L_SCEDITOR_LANG', $lang);
 		}
+
 		// We need to get all smilies with url and code
 		$sql = 'SELECT smiley_url, code
 			FROM ' . SMILIES_TABLE . '
@@ -74,6 +75,7 @@ class sce implements EventSubscriberInterface
 		{
 			$this->template->assign_block_vars('emoticons', array('code' => $row['code'], 'url' => $row['smiley_url']));
 		}
+        //$this->db->sql_freeresult($result);
 	}
 
 	private function get_lang()

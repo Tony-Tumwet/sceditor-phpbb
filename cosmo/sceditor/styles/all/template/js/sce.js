@@ -1,6 +1,42 @@
 var sizes = ['25', '50', '75', '100', '150', '175', '200'],
 	textarea;
 
+function is(node, selector) {
+	var result = false;
+
+	if (node && node.nodeType === 1) {
+		result = (node.matches || node.msMatchesSelector ||
+			node.webkitMatchesSelector).call(node, selector);
+	}
+
+	return result;
+}
+
+function on(node, events, selector, fn, capture) {
+	events.split(' ').forEach(function (event) {
+		var handler;
+
+		handler = fn['_sce-event-' + event + selector] || function (e) {
+			var target = e.target;
+			while (target && target !== node) {
+				if (is(target, selector)) {
+					fn.call(target, e);
+					return;
+				}
+
+				target = target.parentNode;
+			}
+		};
+
+		fn['_sce-event-' + event + selector] = handler;
+
+
+		node.addEventListener(event, handler, capture || false);
+	});
+}
+
+
+
 sceditor.formats.bbcode.set('size', {
 	format: function (element, content) {
 		var fontSize,
@@ -58,40 +94,6 @@ sceditor.formats.bbcode.set('size', {
 sceditor.command.set('size', {
 	/*
 	// esto es por si quiero ponerle nombres a los tamaños de fuente en lugar de numeros
-	function is(node, selector) {
-		var result = false;
-
-		if (node && node.nodeType === 1) {
-			result = (node.matches || node.msMatchesSelector ||
-				node.webkitMatchesSelector).call(node, selector);
-		}
-
-		return result;
-	}
-
-	function on(node, events, selector, fn, capture) {
-		events.split(' ').forEach(function (event) {
-			var handler;
-
-				handler = fn['_sce-event-' + event + selector] || function (e) {
-					var target = e.target;
-					while (target && target !== node) {
-						if (is(target, selector)) {
-							fn.call(target, e);
-							return;
-						}
-
-						target = target.parentNode;
-					}
-				};
-
-				fn['_sce-event-' + event + selector] = handler;
-
-
-			node.addEventListener(event, handler, capture || false);
-		});
-	}
-
 	_dropDown: function (editor, caller, callback) {
 		var content = document.createElement('div');
 
@@ -190,9 +192,66 @@ sceditor.formats.bbcode.set('quote', {
 	breakEnd: false
 });
 
+sceditor.command.set('custombbcodes', {
+	_dropDown: function (editor, caller, callback) {
+		var content = document.createElement('div');
+
+		on(content, 'click', 'a', function (e) {
+			callback($(this).data('bbcode'));
+			editor.closeDropDown(true);
+			e.preventDefault();
+		});
+
+		for (var bbcode in sceCustomBBcode) {
+			var html = '<a class="sceditor-fontsize-option" data-bbcode="' + bbcode + '" title="' + sceCustomBBcode[bbcode] + '" href="#">' + bbcode + '</a>';
+
+			var tmp = document.createElement('div');
+			tmp.innerHTML = html;
+
+			var	ret = document.createDocumentFragment();
+			while (tmp.firstChild) {
+				ret.appendChild(tmp.firstChild);
+			}
+
+			content.appendChild(ret);
+		}
+
+		editor.createDropDown(caller, 'custombbcodes-picker', content);
+	},
+	txtExec: function (caller) {
+		var editor = this;
+
+		sceditor.command.get('custombbcodes')._dropDown(
+			editor,
+			caller,
+			function (bbcode) {
+				editor.insertText(
+					'[' + bbcode + ']',
+					'[/' + bbcode + ']'
+				);
+			}
+		);
+	},
+	exec: function (caller) {
+		var editor = this;
+
+		sceditor.command.get('custombbcodes')._dropDown(
+			editor,
+			caller,
+			function (bbcode) {
+				editor.insertText(
+					'[' + bbcode + ']',
+					'[/' + bbcode + ']'
+				);
+			}
+		);
+	},
+	tooltip: 'Custom BBcodes'
+});
+
+
 // This is needed for the smilies popup
 function setSmilie(tag) {
-	//textarea.data('sceditor').insert(' ' + tag + ' ');
 	sceditor.instance(textarea).insert(' ' + tag + ' ');
 }
 
@@ -216,7 +275,6 @@ $(function () {
 		var attachId = $(this).parents('.attach-row').attr('data-attach-id'),
 			index = phpbb.plupload.getIndex(attachId),
 			textinsert = '[attachment=' + index + ']' + phpbb.plupload.data[index].real_filename + '[/attachment]';
-		//textarea.data('sceditor').insert(textinsert);
 		sceditor.instance(textarea).insert(textinsert);
 	});
 });

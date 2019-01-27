@@ -1,6 +1,42 @@
-/* BB Code styles
-----------------------------------------*/
-/* Quote block */
+/* based on themes\content\default.css */
+html, body, p, code:before, table {
+	margin: 0;
+	padding: 0;
+	font-size: 14px;
+	color: #111;
+	line-height: 1.25;
+	overflow: visible;
+}
+
+html {
+	height: 100%;
+}
+
+.ios {
+	/* Needed for iOS scrolling bug fix */
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+.ios body {
+	/* Needed for iOS scrolling bug fix */
+	position: relative;
+	overflow: auto;
+}
+
+body {
+	/* Needed to make sure body covers the whole editor and that
+		long lines don't cause horizontal scrolling */
+	min-height: 100%;
+	word-wrap: break-word;
+}
+
+body.placeholder::before {
+    content: attr(placeholder);
+    color: #555;
+    font-style: italic;
+}
+
 blockquote {
 	background: transparent none 6px 8px no-repeat;
 	border: 1px solid transparent;
@@ -37,4 +73,13 @@ table {
 table tr td {
 	border: 1px solid black;
 	padding: 5px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	padding: 0; margin: 0;
+}
+
+/* Prevent empty paragraphs from collapsing */
+div, p {
+	min-height: 1.25em;
 }

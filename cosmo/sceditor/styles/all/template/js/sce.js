@@ -1,5 +1,4 @@
-var sizes = ['25', '50', '75', '100', '150', '175', '200'],
-	textarea;
+var textarea;
 
 function is(node, selector) {
 	var result = false;
@@ -29,7 +28,6 @@ function on(node, events, selector, fn, capture) {
 		};
 
 		fn['_sce-event-' + event + selector] = handler;
-
 
 		node.addEventListener(event, handler, capture || false);
 	});
@@ -74,14 +72,14 @@ sceditor.formats.bbcode.set('size', {
 				sizesIdx = ~~fontSize;
 			}
 
-			if (sizesIdx > 6) {
-				sizesIdx = 6;
+			if (sizesIdx > 4) {
+				sizesIdx = 4;
 			}
 			else if (sizesIdx < 0) {
 				sizesIdx = 0;
 			}
 
-			size = sizes[sizesIdx];
+			size = sceFontSizes[sizesIdx];
 		}
 
 		return '[size=' + size + ']' + content + '[/size]';
@@ -92,9 +90,8 @@ sceditor.formats.bbcode.set('size', {
 });
 
 sceditor.command.set('size', {
-	/*
-	// esto es por si quiero ponerle nombres a los tamaños de fuente en lugar de numeros
 	_dropDown: function (editor, caller, callback) {
+		var fontLabels = ['L_FONT_TINY', 'L_FONT_SMALL', 'L_FONT_NORMAL', 'L_FONT_LARGE', 'L_FONT_HUGE'];
 		var content = document.createElement('div');
 
 		on(content, 'click', 'a', function (e) {
@@ -103,13 +100,13 @@ sceditor.command.set('size', {
 			e.preventDefault();
 		});
 
-		for (var i = 1; i < 7; i++) {
-			// Only consider maxsize when set greater 0
-			if (sceController.isMaxFontsizeSet && sizes[i - 1] > sceController.getMaxFontsize) {
+		for (var i = 0; i < 5; i++) {
+			if (sceController.isMaxFontsizeSet && sceFontSizes[i] > sceController.getMaxFontsize) {
 				break;
 			}
 
-			var html = '<a class="sceditor-fontsize-option" data-size="' + i + '" href="#"><font size="' + i + '">' + i + '</font></a>';
+			var label = sceFontSizesTexts[ fontLabels[i] ];
+			var html = '<a class="sceditor-fontsize-option" data-size="' + sceFontSizes[i] + '" href="#">' + label + '</a>';
 
 			var tmp = document.createElement('div');
 			tmp.innerHTML = html;
@@ -124,26 +121,36 @@ sceditor.command.set('size', {
 
 		editor.createDropDown(caller, 'fontsize-picker', content);
 	},
-	*/
 	txtExec: function (caller) {
 		var editor = this;
 
 		sceditor.command.get('size')._dropDown(
 			editor,
 			caller,
-			function (sizesIdx) {
-				sizesIdx = ~~sizesIdx;
-				if (sizesIdx > 6) {
-					sizesIdx = 6;
-				}
-				else if (sizesIdx < 0) {
-					sizesIdx = 0;
-				}
-
+			function (size) {
 				editor.insertText(
-					'[size=' + sizes[sizesIdx] + ']',
+					'[size=' + size + ']',
 					'[/size]'
 				);
+			}
+		);
+	},
+	exec: function (caller) {
+		var editor = this;
+
+		sceditor.command.get('size')._dropDown(
+			editor,
+			caller,
+			function (fontSize) {
+				fontSize = ~~fontSize;
+				if (fontSize > 200) {
+					fontSize = 200;
+				}
+				else if (fontSize < 50) {
+					fontSize = 50;
+				}
+
+				editor.execCommand('fontsize', fontSize);
 			}
 		);
 	}

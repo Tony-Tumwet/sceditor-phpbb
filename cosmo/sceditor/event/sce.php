@@ -52,10 +52,13 @@ class sce implements EventSubscriberInterface
 	public function initialize_sceditor()
 	{
 		// Activate the SCEditor
-		$this->template->assign_vars(array('S_SCEDITOR' => true,
+		$this->template->assign_vars(array(
+		    'S_SCEDITOR' => true,
 			'MAX_FONTSIZE' => $this->config['max_post_font_size'],
 			'U_EMOTICONS_ROOT' => $this->root_path . $this->config['smilies_path'] . '/',
-			'U_CSS' => $this->root_path . 'ext/cosmo/sceditor/styles/all/template/js/themes/' . $this->css_file));
+			'U_CSS' => $this->root_path . 'ext/cosmo/sceditor/styles/all/template/js/themes/' . $this->css_file,
+            'U_TOOLS_IMG' => $this->root_path . 'ext/cosmo/sceditor/styles/all/template/assets/'
+        ));
 
 		// Localize it maybe?
 		$lang = $this->get_lang();
@@ -87,10 +90,12 @@ class sce implements EventSubscriberInterface
 		{
 			return false;
 		}
+
 		if (is_readable($this->jsDir . "{$lang}.js"))
 		{
 			return $lang;
 		}
+
 		return false;
 	}
 }

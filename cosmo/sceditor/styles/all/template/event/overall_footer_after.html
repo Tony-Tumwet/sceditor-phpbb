@@ -5,6 +5,10 @@
 <!-- INCLUDEJS @cosmo_sceditor/js/languages/{L_SCEDITOR_LANG}.js -->
 <!-- ENDIF -->
 
+<style type="text/css">
+    .sceditor-button-custombbcodes div { background: url('{U_TOOLS_IMG}/cog.png'); }
+</style>
+
 <script type="text/javascript">
     var sceController = (function ($) {
         var _sourceButton,
@@ -329,6 +333,16 @@
             }
         }
     })(jQuery);
+
+    var sceFontSizesTexts = {
+        "L_FONT_TINY": "{L_FONT_TINY}",
+        "L_FONT_SMALL": "{L_FONT_SMALL}",
+        "L_FONT_NORMAL": "{L_FONT_NORMAL}",
+        "L_FONT_LARGE": "{L_FONT_LARGE}",
+        "L_FONT_HUGE": "{L_FONT_HUGE}"
+    };
+
+    var sceFontSizes = ['50', '85', '100', '150', '200'];
 
     var sceCustomBBcode = {
         <!-- IF S_BBCODE_ALLOWED -->

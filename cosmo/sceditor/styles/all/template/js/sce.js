@@ -1,6 +1,6 @@
 var textarea;
 
-function is(node, selector) {
+function sce_is(node, selector) {
 	var result = false;
 
 	if (node && node.nodeType === 1) {
@@ -11,14 +11,14 @@ function is(node, selector) {
 	return result;
 }
 
-function on(node, events, selector, fn, capture) {
+function sce_on(node, events, selector, fn, capture) {
 	events.split(' ').forEach(function (event) {
 		var handler;
 
 		handler = fn['_sce-event-' + event + selector] || function (e) {
 			var target = e.target;
 			while (target && target !== node) {
-				if (is(target, selector)) {
+				if (sce_is(target, selector)) {
 					fn.call(target, e);
 					return;
 				}
@@ -94,7 +94,7 @@ sceditor.command.set('size', {
 		var fontLabels = ['L_FONT_TINY', 'L_FONT_SMALL', 'L_FONT_NORMAL', 'L_FONT_LARGE', 'L_FONT_HUGE'];
 		var content = document.createElement('div');
 
-		on(content, 'click', 'a', function (e) {
+		sce_on(content, 'click', 'a', function (e) {
 			callback($(this).data('size'));
 			editor.closeDropDown(true);
 			e.preventDefault();
@@ -156,7 +156,6 @@ sceditor.command.set('size', {
 	}
 });
 
-
 sceditor.formats.bbcode.set('quote', {
 	/*
 	format: function (element, content) {
@@ -203,7 +202,7 @@ sceditor.command.set('custombbcodes', {
 	_dropDown: function (editor, caller, callback) {
 		var content = document.createElement('div');
 
-		on(content, 'click', 'a', function (e) {
+		sce_on(content, 'click', 'a', function (e) {
 			callback($(this).data('bbcode'));
 			editor.closeDropDown(true);
 			e.preventDefault();

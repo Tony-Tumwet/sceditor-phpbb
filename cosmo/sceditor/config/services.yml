@@ -7,10 +7,10 @@ services:
     cosmo.sceditor.event.sce:
         class: cosmo\sceditor\event\sce
         arguments:
-            - @dbal.conn
-            - @template
-            - @config
-            - @user
-            - %core.root_path%
+            - '@dbal.conn'
+            - '@template'
+            - '@config'
+            - '@user'
+            - '%core.root_path%'
         tags:
             - { name: event.listener }

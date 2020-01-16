@@ -31,7 +31,7 @@ class bbcodedata extends \phpbb\db\migration\migration
 
 	public function removebbcode()
 	{
-		$bbcodedata = array('li', 'ul', 's', 'sub', 'sup', 'left', 'right', 'center', 'justify', 'font=', 'ol', 'table', 'td', 'tr', 'hr', 'youtube', 'rtl', 'img', 'ltr',);
+		$bbcodedata = array('li', 'ul', 's', 'sub', 'sup', 'left', 'right', 'center', 'justify', 'font=', 'ol', 'table', 'td', 'tr', 'hr', 'youtube', 'rtl', 'image', 'ltr',);
 
 		$sql = 'DELETE FROM ' . $this->table_prefix . 'bbcodes WHERE ' . $this->db->sql_in_set('bbcode_tag', $bbcodedata);
 		$this->db->sql_query($sql);
@@ -39,13 +39,13 @@ class bbcodedata extends \phpbb\db\migration\migration
 
 	public function addbbcode()
 	{
-		$bbcodedata = array('li', 'ul', 's', 'sub', 'sup', 'left', 'right', 'center', 'justify', 'font=', 'ol', 'table', 'td', 'tr', 'hr', 'youtube', 'rtl', 'img', 'ltr',);
+		$bbcodedata = array('li', 'ul', 's', 'sub', 'sup', 'left', 'right', 'center', 'justify', 'font=', 'ol', 'table', 'td', 'tr', 'hr', 'youtube', 'rtl', 'image', 'ltr',);
 
 		$sql = 'DELETE FROM ' . $this->table_prefix . 'bbcodes WHERE ' . $this->db->sql_in_set('bbcode_tag', $bbcodedata);
 		$this->db->sql_query($sql);
 
 		$sql = 'SELECT MAX(bbcode_id) AS max_id
-    				FROM ' . $this->table_prefix . 'bbcodes';
+					FROM ' . $this->table_prefix . 'bbcodes';
 		$result = $this->db->sql_query($sql);
 
 		$style_ids = 0;
@@ -266,16 +266,16 @@ class bbcodedata extends \phpbb\db\migration\migration
 				'second_pass_match' => '!\\[rtl:$uid\\](.*?)\\[/rtl:$uid\\]!s',
 				'second_pass_replace' => '<div style="direction: rtl;">${1}</div>'
 			),
-            array( // row #18
+			array( // row #18
 				'bbcode_id' => ++$style_ids,
-				'bbcode_tag' => 'img=',
+				'bbcode_tag' => 'image=',
 				'bbcode_helpline' => '',
 				'display_on_posting' => 0,
-				'bbcode_match' => '[img={NUMBER1}x{NUMBER2}]{URL}[/img]',
+				'bbcode_match' => '[image={NUMBER1}x{NUMBER2}]{URL}[/image]',
 				'bbcode_tpl' => '<img src="{URL}" style="width: {NUMBER1}px;height: {NUMBER2}px;" />',
-				'first_pass_match' => '!\[img\=([0-9]+)x([0-9]+)\](.*?)[/img\]!iue',
-				'first_pass_replace' => '[img=${1}x${2}:$uid]${3}[/img:$uid]',
-				'second_pass_match' => '!\[img\=([0-9]+)x([0-9]+):$uid\](.*?)[/img:$uid\]!su',
+				'first_pass_match' => '!\[image\=([0-9]+)x([0-9]+)\](.*?)[/image\]!iue',
+				'first_pass_replace' => '[image=${1}x${2}:$uid]${3}[/image:$uid]',
+				'second_pass_match' => '!\[image\=([0-9]+)x([0-9]+):$uid\](.*?)[/image:$uid\]!su',
 				'second_pass_replace' => '<img src="${3}" style="width: ${1}px;height: ${2}px;" />'
 			),
 			array( // row #19

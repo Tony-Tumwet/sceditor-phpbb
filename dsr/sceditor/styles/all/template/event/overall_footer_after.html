@@ -1,15 +1,42 @@
 <!-- IF S_SCEDITOR -->
-<!-- INCLUDEJS @cosmo_sceditor/js/jquery.sceditor.bbcode.min.js -->
+<!-- INCLUDEJS @dsr_sceditor/js/jquery.sceditor.bbcode.min.js -->
 
 <!-- IF L_SCEDITOR_LANG -->
-<!-- INCLUDEJS @cosmo_sceditor/js/languages/{L_SCEDITOR_LANG}.js -->
+<!-- INCLUDEJS @dsr_sceditor/js/languages/{L_SCEDITOR_LANG}.js -->
 <!-- ENDIF -->
 
 <style type="text/css">
     .sceditor-button-custombbcodes div { background: url('{U_TOOLS_IMG}/cog.png'); }
+    .sceditor-button-code2 div { background-position: 0 -576px; }
 </style>
 
 <script type="text/javascript">
+    var sceFontSizesTexts = {
+        "L_FONT_TINY": "{L_FONT_TINY}",
+        "L_FONT_SMALL": "{L_FONT_SMALL}",
+        "L_FONT_NORMAL": "{L_FONT_NORMAL}",
+        "L_FONT_LARGE": "{L_FONT_LARGE}",
+        "L_FONT_HUGE": "{L_FONT_HUGE}"
+    };
+
+    var sceFontSizes = ['50', '85', '100', '150', '200'];
+
+    var sceEmoticonsBBcode = {
+        <!-- IF S_SMILIES_ALLOWED -->
+            <!-- BEGIN emoticons -->
+                "{emoticons.code|escape('js')}": "{emoticons.url}"<!-- IF !emoticons.S_LAST_ROW -->, <!-- ENDIF -->
+            <!-- END emoticons -->
+        <!-- ENDIF -->
+    };
+
+    var sceCustomBBcode = {
+        <!-- IF S_BBCODE_ALLOWED -->
+            <!-- BEGIN custom_tags -->
+                "{custom_tags.BBCODE_TAG|escape('js')}": "{custom_tags.BBCODE_HELPLINE|escape('js')}"<!-- IF !custom_tags.S_LAST_ROW -->, <!-- ENDIF -->
+            <!-- END custom_tags -->
+        <!-- ENDIF -->
+    };
+
     var sceController = (function ($) {
         var _sourceButton,
             _sourceButtonAvailable,
@@ -82,7 +109,10 @@
                         _tmp = location.pathname.lastIndexOf('/') + 1;
                         _docroot = location.pathname.substr(0, _tmp);
                     }
-                    _fullDocroot = location.protocol + '//' + ('' === location.username ? '' : (location.username + ('' === location.password ? '' : (':' + location.password)) + '@')) + location.hostname + ('' === location.port ? '' : ':' + location.port) + _docroot;
+                    _fullDocroot = location.protocol + '//' +
+                        ('' === location.username ? '' : (location.username + ('' === location.password ? '' : (':' + location.password)) + '@')) +
+                        location.hostname + ('' === location.port ? '' : ':' + location.port) + _docroot;
+
                     return _docroot;
                 },
                 'emoticons': {
@@ -121,6 +151,7 @@
 
                         _cssBase = _tmp[0];
                         _lastStyleSheet = _cssStyleSheet;
+
                         return _cssBase;
                     },
                     'realpath': function (_path) {
@@ -231,29 +262,13 @@
 
                 sceditor.create(_textarea, {
                     format: 'bbcode',
-                    //icons: 'material',
+                    plugins: 'autosave',
+                    icons: '{EDITOR_BUTTONS_ICONS}',
                     width: maxWidth,
-                    <!-- IF S_QUICK_REPLY -->
-                        //toolbar: 'bold,italic,underline,strike|code,quote,removeformat|source',
-                        toolbarExclude : 'date,time,print,ltr,rtl,font,email',
-                    <!-- ELSE -->
-                        toolbar: 'bold,italic,underline,strike,subscript,superscript|left,center,right,justify|' +
-                                    'size,color,removeformat|cut,copy,pastetext|bulletlist,orderedlist,indent,outdent|table|' +
-                                    'code,quote|horizontalrule,image,link,unlink|emoticon,youtube|custombbcodes,maximize,source',
-                    <!-- ENDIF -->
-                    <!-- IF S_SMILIES_ALLOWED -->
-                        emoticonsRoot: "{U_EMOTICONS_ROOT}",
-                        emoticons: {
-                            dropdown: {
-                                <!-- BEGIN emoticons -->
-                                "{emoticons.code|escape('js')}": "{emoticons.url}"<!-- IF !emoticons.S_LAST_ROW -->, <!-- ENDIF -->
-                                <!-- END emoticons -->
-                            }
-                        },
-                    <!-- ELSE -->
-                        emoticonsEnabled: false,
-                    <!-- ENDIF -->
-                    style: '" /><style type="text/css">' + _cssString + '</style><link rel="stylesheet" type="text/css" href="{U_CSS}?assets_version={T_ASSETS_VERSION}'
+                    toolbar: <!-- IF S_QUICK_REPLY --> '{EDITOR_QUICK_TOOLBAR}' <!-- ELSE --> '{EDITOR_NORMAL_TOOLBAR}' <!-- ENDIF -->,
+                    emoticonsRoot: '{U_EMOTICONS_ROOT}',
+                    emoticons: { dropdown: sceEmoticonsBBcode },
+                    style: '" /><style type="text/css">' + _cssString + '</style><link rel="stylesheet" type="text/css" href="{U_CSS_FIXES}?assets_version={T_ASSETS_VERSION}'
                 });
 
                 // Fix the position of the editor layer
@@ -333,25 +348,7 @@
             }
         }
     })(jQuery);
-
-    var sceFontSizesTexts = {
-        "L_FONT_TINY": "{L_FONT_TINY}",
-        "L_FONT_SMALL": "{L_FONT_SMALL}",
-        "L_FONT_NORMAL": "{L_FONT_NORMAL}",
-        "L_FONT_LARGE": "{L_FONT_LARGE}",
-        "L_FONT_HUGE": "{L_FONT_HUGE}"
-    };
-
-    var sceFontSizes = ['50', '85', '100', '150', '200'];
-
-    var sceCustomBBcode = {
-        <!-- IF S_BBCODE_ALLOWED -->
-            <!-- BEGIN custom_tags -->
-                "{custom_tags.BBCODE_TAG|escape('js')}": "{custom_tags.BBCODE_HELPLINE|escape('js')}"<!-- IF !custom_tags.S_LAST_ROW -->, <!-- ENDIF -->
-            <!-- END custom_tags -->
-        <!-- ENDIF -->
-    };
 </script>
 
-<!-- INCLUDEJS @cosmo_sceditor/js/sce.js -->
+<!-- INCLUDEJS @dsr_sceditor/js/sce.js -->
 <!-- ENDIF -->

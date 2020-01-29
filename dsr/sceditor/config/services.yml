@@ -1,6 +1,6 @@
 services:
-    cosmo.sceditor.event.sce:
-        class: cosmo\sceditor\event\sce
+    dsr.sceditor.event.sce:
+        class: dsr\sceditor\event\listener
         arguments:
             - '@dbal.conn'
             - '@template'

@@ -1,9 +1,9 @@
 {
-  "name": "cosmo/sceditor",
+  "name": "dsr/sceditor",
   "type": "phpbb-extension",
   "description": "WYSIWYG BBCode Editor",
-  "homepage": "https://github.com/xchwarze/wysiwygsceditorphpbb",
-  "version": "2.0.0",
+  "homepage": "https://github.com/xchwarze/sceditor-phpbb",
+  "version": "2.1.0",
   "time": "2019-01-24",
   "license": "GPL-2.0",
   "authors": [
@@ -19,28 +19,25 @@
       "role": "owner"
     },
     {
-      "name": "Peter Stein",
-      "email": "peter.stein@de.ibm.com",
-      "homepage": "https://service-exilium.de/",
-      "role": "Developer"
-    },
-    {
       "name": "DSR!",
       "email": "xchwarze@gmail.com",
       "homepage": "https://github.com/xchwarze",
+      "role": "owner"
+    },
+    {
+      "name": "Peter Stein",
+      "email": "peter.stein@de.ibm.com",
+      "homepage": "https://service-exilium.de/",
       "role": "Developer"
     }
   ],
   "require": {
     "php": ">=5.4"
   },
-  "require-dev": {
-    "phpbb/epv": "dev-master"
-  },
   "extra": {
-    "display-name": "phpbb 3.2 WYSIWYG BBCode Editor",
+    "display-name": "SCEditor Editor",
     "soft-require": {
-      "phpbb/phpbb": ">=3.1.5,<=3.2@dev"
+      "phpbb/phpbb": "<=3.2"
     }
   }
 }

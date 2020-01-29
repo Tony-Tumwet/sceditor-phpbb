@@ -1,6 +1,6 @@
 <!-- IF S_SCEDITOR -->
 <!-- INCLUDEJS @dsr_sceditor/js/jquery.sceditor.bbcode.min.js -->
-<!-- INCLUDEJS @dsr_sceditor/js/plugins/autosave.js -->
+<!-- INCLUDEJS @dsr_sceditor/js/custom_autosave.js -->
 
 <!-- IF L_SCEDITOR_LANG -->
 <!-- INCLUDEJS @dsr_sceditor/js/languages/{L_SCEDITOR_LANG}.js -->
@@ -9,6 +9,9 @@
 <style type="text/css">
     .sceditor-button-custombbcodes div { background: url('{U_TOOLS_IMG}/cog.png'); }
     .sceditor-button-code2 div { background-position: 0 -576px; }
+    div.sceditor-dropdown {
+        padding: 5px;
+    }
 </style>
 
 <script type="text/javascript">
@@ -261,13 +264,13 @@
 
                 sceditor.create(_textarea, {
                     format: 'bbcode',
-                    //plugins: 'autosave',
+                    plugins: 'autosave',
                     icons: '{EDITOR_BUTTONS_ICONS}',
                     width: maxWidth,
                     toolbar: <!-- IF S_QUICK_REPLY --> '{EDITOR_QUICK_TOOLBAR}' <!-- ELSE --> '{EDITOR_NORMAL_TOOLBAR}' <!-- ENDIF -->,
                     emoticonsRoot: '{U_EMOTICONS_ROOT}',
                     emoticons: { dropdown: sceEmoticonsBBcode },
-                    style: '" /><style type="text/css">' + _cssString + '</style><link rel="stylesheet" type="text/css" href="{U_CSS_FIXES}?assets_version={T_ASSETS_VERSION}'
+                    style: '" /><style type="text/css">' + _cssString + '</style><link rel="stylesheet" type="text/css" href="{U_CSS_FIXES}?assets_version={T_ASSETS_VERSION}',
                 });
 
                 // Fix the position of the editor layer
@@ -309,23 +312,23 @@
                 _internalMethods.sourceButton.init();
 
                 <!-- IF S_BBCODE_ALLOWED -->
-                    <!-- IF not S_BBCODE_CHECKED eq '' -->
-                        // BBCode is checked as disallowed, set SCEditor to sourceMode
-                        _internalMethods.sourceMode(true);
-                    <!-- ENDIF -->
+                <!-- IF not S_BBCODE_CHECKED eq '' -->
+                // BBCode is checked as disallowed, set SCEditor to sourceMode
+                _internalMethods.sourceMode(true);
+                <!-- ENDIF -->
 
-                    // Initialize the onclick event for the BBCode checkbox
-                    _internalMethods.sourceButton.setOnClick();
+                // Initialize the onclick event for the BBCode checkbox
+                _internalMethods.sourceButton.setOnClick();
                 <!-- ELSE -->
-                    /**
-                     * BBCodes are completly disallowed
-                     * Hide the sourceButton of SCEditor if visible
-                     * and change to sourceMode
-                     */
+                /**
+                 * BBCodes are completly disallowed
+                 * Hide the sourceButton of SCEditor if visible
+                 * and change to sourceMode
+                 */
 
-                    // TODO fix this for use sourceMode(true) in fast response
-                    //_internalMethods.sourceButton.hide();
-                    //_internalMethods.sourceMode(true);
+                // TODO fix this for use sourceMode(true) in fast response
+                //_internalMethods.sourceButton.hide();
+                //_internalMethods.sourceMode(true);
                 <!-- ENDIF -->
 
                 // Emoticons part

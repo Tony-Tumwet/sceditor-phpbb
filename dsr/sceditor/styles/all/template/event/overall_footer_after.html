@@ -1,5 +1,6 @@
 <!-- IF S_SCEDITOR -->
 <!-- INCLUDEJS @dsr_sceditor/js/jquery.sceditor.bbcode.min.js -->
+<!-- INCLUDEJS @dsr_sceditor/js/plugins/autosave.js -->
 
 <!-- IF L_SCEDITOR_LANG -->
 <!-- INCLUDEJS @dsr_sceditor/js/languages/{L_SCEDITOR_LANG}.js -->
@@ -21,20 +22,18 @@
 
     var sceFontSizes = ['50', '85', '100', '150', '200'];
 
+    // fix use of S_SMILIES_ALLOWED
     var sceEmoticonsBBcode = {
-        <!-- IF S_SMILIES_ALLOWED -->
-            <!-- BEGIN emoticons -->
-                "{emoticons.code|escape('js')}": "{emoticons.url}"<!-- IF !emoticons.S_LAST_ROW -->, <!-- ENDIF -->
-            <!-- END emoticons -->
-        <!-- ENDIF -->
+        <!-- BEGIN emoticons -->
+            "{emoticons.code|escape('js')}": "{emoticons.url}"<!-- IF !emoticons.S_LAST_ROW -->, <!-- ENDIF -->
+        <!-- END emoticons -->
     };
 
+    // fix use of S_BBCODE_ALLOWED
     var sceCustomBBcode = {
-        <!-- IF S_BBCODE_ALLOWED -->
-            <!-- BEGIN custom_tags -->
-                "{custom_tags.BBCODE_TAG|escape('js')}": "{custom_tags.BBCODE_HELPLINE|escape('js')}"<!-- IF !custom_tags.S_LAST_ROW -->, <!-- ENDIF -->
-            <!-- END custom_tags -->
-        <!-- ENDIF -->
+        <!-- BEGIN custom_tags -->
+            "{custom_tags.BBCODE_TAG|escape('js')}": "{custom_tags.BBCODE_HELPLINE|escape('js')}"<!-- IF !custom_tags.S_LAST_ROW -->, <!-- ENDIF -->
+        <!-- END custom_tags -->
     };
 
     var sceController = (function ($) {
@@ -262,7 +261,7 @@
 
                 sceditor.create(_textarea, {
                     format: 'bbcode',
-                    plugins: 'autosave',
+                    //plugins: 'autosave',
                     icons: '{EDITOR_BUTTONS_ICONS}',
                     width: maxWidth,
                     toolbar: <!-- IF S_QUICK_REPLY --> '{EDITOR_QUICK_TOOLBAR}' <!-- ELSE --> '{EDITOR_NORMAL_TOOLBAR}' <!-- ENDIF -->,

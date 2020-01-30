@@ -10,7 +10,7 @@ Updated by DSR! for use in phpBB 3.2 and 3.3
 ![Example of preview](docs/example2.png)
 
 ## How to install
-* Just copy folder cosmo/ to {PHPBB_ROOT}/ext/
+* Just copy folder dsr/ to {PHPBB_ROOT}/ext/
 
 ## Compatibility ##
 * Originally extension was compatible to 3.2.x and 3.3.x

@@ -11,9 +11,15 @@ matrix:
       env: DB=mysqli
     - php: 7.2
       env: DB=mysqli
+    - php: 7.3
+      env: DB=mysqli
+    - php: 7.4
+      env: DB=mysqli
     - php: nightly
       env: DB=mysqli
   allow_failures:
+    - php: 7.3
+    - php: 7.4
     - php: nightly
   fast_finish: true
 

@@ -28,12 +28,61 @@ function sce_on(node, events, selector, fn, capture) {
 		};
 
 		fn['_sce-event-' + event + selector] = handler;
-
 		node.addEventListener(event, handler, capture || false);
 	});
 }
 
+function sce_locale(text) {
+	if (sceditor && sceditor.defaultOptions.locale) {
+		var test = sceditor.locale[ sceditor.defaultOptions.locale ][ text ];
+		return test ? test : text;
+	}
 
+	return text;
+}
+
+
+
+// Fix for php 3.2.7+
+sceditor.formats.bbcode.set('img', {
+	format: function (element, content) {
+		var attr = sceditor.dom.attr;
+
+		return '[img]' + attr(element, 'src') + '[/img]';
+	},
+	html: function (token, attrs, content) {
+		var escapeUriScheme = sceditor.escapeUriScheme;
+
+		return '<img src="' + escapeUriScheme(content) + '" />';
+	}
+});
+
+sceditor.command.set('image', {
+	_dropDown: function (editor, caller, selected, cb) {
+		var child = document.createElement('div');
+		child.innerHTML = '<div><label for="link">' + sce_locale('URL:') + '</label> ' +
+			'<input type="text" id="image" dir="ltr" placeholder="https://" /></div>' +
+			'<div><input type="button" class="button" value="' + sce_locale('Insert') + '" />' +
+			'</div>';
+
+		var content = document.createElement('div');
+		content.appendChild(child);
+
+		var	urlInput = content.querySelectorAll('#image')[0];
+		urlInput.value = selected;
+
+		sce_on(content, 'click', '.button', function (e) {
+			if (urlInput.value) {
+				cb(urlInput.value);
+			}
+
+			editor.closeDropDown(true);
+			e.preventDefault();
+		});
+
+		editor.createDropDown(caller, 'insertimage', content);
+	},
+});
 
 sceditor.formats.bbcode.set('size', {
 	format: function (element, content) {
@@ -106,10 +155,8 @@ sceditor.command.set('size', {
 			}
 
 			var label = sceFontSizesTexts[ fontLabels[i] ];
-			var html = '<a class="sceditor-fontsize-option" data-size="' + sceFontSizes[i] + '" href="#">' + label + '</a>';
-
 			var tmp = document.createElement('div');
-			tmp.innerHTML = html;
+			tmp.innerHTML = '<a class="sceditor-fontsize-option" data-size="' + sceFontSizes[i] + '" href="#">' + label + '</a>';
 
 			var	ret = document.createDocumentFragment();
 			while (tmp.firstChild) {
@@ -158,6 +205,7 @@ sceditor.command.set('size', {
 
 sceditor.command.set('code2', {
 	_dropDown: function (editor, caller, callback) {
+		// ver de implementar lo de "more" para acortar el desplegable
 		var languages = {
 			'java': 'JAVA',
 			'cs': 'C#',
@@ -186,16 +234,14 @@ sceditor.command.set('code2', {
 		var content = document.createElement('div');
 
 		sce_on(content, 'click', 'a', function (e) {
-			callback($(this).data('code2'));
+			callback($(this).data('code'));
 			editor.closeDropDown(true);
 			e.preventDefault();
 		});
 
 		for (var label in languages) {
-			var html = '<a class="sceditor-fontsize-option" data-code="' + label + '" href="#">' + languages[ label ] + '</a>';
-
 			var tmp = document.createElement('div');
-			tmp.innerHTML = html;
+			tmp.innerHTML = '<a class="sceditor-fontsize-option" data-code="' + label + '" href="#">' + languages[ label ] + '</a>';
 
 			var	ret = document.createDocumentFragment();
 			while (tmp.firstChild) {
@@ -291,10 +337,8 @@ sceditor.command.set('custombbcodes', {
 		});
 
 		for (var bbcode in sceCustomBBcode) {
-			var html = '<a class="sceditor-fontsize-option" data-bbcode="' + bbcode + '" title="' + sceCustomBBcode[bbcode] + '" href="#">' + bbcode + '</a>';
-
 			var tmp = document.createElement('div');
-			tmp.innerHTML = html;
+			tmp.innerHTML = '<a class="sceditor-fontsize-option" data-bbcode="' + bbcode + '" title="' + sceCustomBBcode[bbcode] + '" href="#">' + bbcode + '</a>';
 
 			var	ret = document.createDocumentFragment();
 			while (tmp.firstChild) {

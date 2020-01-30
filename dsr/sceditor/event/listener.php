@@ -49,7 +49,7 @@ class listener implements EventSubscriberInterface
 
         $this->editor_normal_toolbar = 'bold,italic,underline,strike,subscript,superscript|left,center,right,justify|' .
             'size,color,removeformat|cut,copy,pastetext|bulletlist,orderedlist,indent,outdent|table|' .
-            'code,quote|horizontalrule,image,link,unlink|emoticon,youtube|custombbcodes,maximize,source';
+            'code2,quote|horizontalrule,image,link,unlink|emoticon,youtube|custombbcodes,maximize,source';
         $this->editor_quick_toolbar  = 'bold,italic,underline|color,removeformat|quote|image,link,unlink|emoticon,youtube|maximize,source';
 
         // square / modern / office / default / defaultdark

@@ -77,8 +77,8 @@ class listener implements EventSubscriberInterface
             'EDITOR_QUICK_TOOLBAR'   => $this->editor_quick_toolbar,
             'MAX_FONTSIZE'           => $this->config['max_post_font_size'],
             'U_EMOTICONS_ROOT'       => $this->root_path . $this->config['smilies_path'] . '/',
-            'U_CSS_THEME'            => $this->sceditor_url . '/js/themes/' . $this->css_theme_name,
-            'U_CSS_FIXES'            => $this->sceditor_url . '/js/themes/' . $this->css_fixes_name,
+            'U_CSS_THEME'            => $this->sceditor_url . '/js/sceditor/themes/' . $this->css_theme_name,
+            'U_CSS_FIXES'            => $this->sceditor_url . '/js/sceditor/themes/' . $this->css_fixes_name,
             'U_TOOLS_IMG'            => $this->sceditor_url . '/assets'
         ));
 
@@ -103,7 +103,7 @@ class listener implements EventSubscriberInterface
             return false;
         }
 
-        $languages_dir = realpath(__DIR__ . '/../styles/all/template/js/languages');
+        $languages_dir = realpath(__DIR__ . '/../styles/all/template/js/sceditor/languages');
 
         return is_readable( "$languages_dir/{$lang}.js") ? $lang : false;
     }

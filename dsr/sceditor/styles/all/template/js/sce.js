@@ -203,6 +203,87 @@ sceditor.command.set('size', {
 	}
 });
 
+sceditor.command.set('code2', {
+	_dropDown: function (editor, caller, callback) {
+		// ver de implementar lo de "more" para acortar el desplegable
+		var languages = {
+			'java': 'JAVA',
+			'cs': 'C#',
+			'php': 'PHP',
+			'python': 'Python',
+			'delphi': 'Delphi',
+			'cpp': 'C/C++',
+			'perl': 'Perl',
+			'ruby': 'Ruby',
+			'autoit': 'Autoit',
+			'vbscript': 'VB Script',
+			'vbnet': 'VB .NET',
+			'sql': 'SQL',
+			'javascript': 'Javascript',
+			'html': 'HTML',
+			'css': 'CSS',
+			'json': 'JSON',
+			'bash': 'Bash',
+			'powershell': 'Powershell',
+			'asm': 'ASM',
+			'ini': 'Ini',
+			'yaml': 'Yaml',
+			'haskell': 'Haskell',
+			'objetivec': 'Objective C'
+		};
+		var content = document.createElement('div');
+
+		sce_on(content, 'click', 'a', function (e) {
+			callback($(this).data('code'));
+			editor.closeDropDown(true);
+			e.preventDefault();
+		});
+
+		for (var label in languages) {
+			var tmp = document.createElement('div');
+			tmp.innerHTML = '<a class="sceditor-fontsize-option" data-code="' + label + '" href="#">' + languages[ label ] + '</a>';
+
+			var	ret = document.createDocumentFragment();
+			while (tmp.firstChild) {
+				ret.appendChild(tmp.firstChild);
+			}
+
+			content.appendChild(ret);
+		}
+
+		editor.createDropDown(caller, 'code-picker', content);
+	},
+	txtExec: function (caller) {
+		var editor = this;
+
+		sceditor.command.get('code2')._dropDown(
+			editor,
+			caller,
+			function (language) {
+				editor.insertText(
+					'[code2=' + language + ']',
+					'[/code2]'
+				);
+			}
+		);
+	},
+	exec: function (caller) {
+		var editor = this;
+
+		sceditor.command.get('code2')._dropDown(
+			editor,
+			caller,
+			function (language) {
+				editor.insertText(
+					'[code2=' + language + ']',
+					'[/code2]'
+				);
+			}
+		);
+	},
+	tooltip: 'Code',
+});
+
 sceditor.formats.bbcode.set('quote', {
 	/*
 	format: function (element, content) {

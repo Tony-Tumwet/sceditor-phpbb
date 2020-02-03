@@ -6,6 +6,21 @@
 <!-- INCLUDEJS @dsr_sceditor/js/sceditor/languages/{L_SCEDITOR_LANG}.js -->
 <!-- ENDIF -->
 
+<!-- syntax highlight start -->
+<!-- INCLUDEJS @dsr_sceditor/js/highlight/highlight.pack.js -->
+
+<script>
+    head.ready(function () {
+        $('pre code').each(function(i, block) {
+            // si no hago este chequeo rompe el tag code original
+            if (typeof block === 'object' && block.className !== '') {
+                hljs.highlightBlock(block);
+            }
+        });
+    });
+</script>
+<!-- syntax highlight end -->
+
 <style type="text/css">
     .sceditor-button-custombbcodes div { background: url('{U_TOOLS_IMG}/cog.png'); }
     .sceditor-button-code2 div { background-position: 0 -576px; }

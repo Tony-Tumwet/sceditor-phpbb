@@ -52,6 +52,48 @@
         <!-- END custom_tags -->
     };
 
+    var sceCodeBBcode = {
+        dropdown: {
+            'bash': 'Bash',
+            'cs': 'C#',
+            'cpp': 'C/C++',
+            'java': 'Java',
+            'javascript': 'Javascript',
+            'php': 'Php',
+            'python': 'Python',
+            'sql': 'SQL',
+            'shell': 'Shell',
+            'autoit': 'Autoit',
+            'delphi': 'Delphi',
+            'vbnet': 'VB .NET',
+            'vbscript': 'VB Script',
+        },
+        more: {
+            'css': 'CSS',
+            'diff': 'Diff',
+            'go': 'Go',
+            'xml': 'Xml',
+            'http': 'Http',
+            'json': 'JSON',
+            'less': 'Less',
+            'lua': 'Lua',
+            'makefile': 'Makefile',
+            'markdown': 'Markdown',
+            'nginx': 'Nginx',
+            'ruby': 'Ruby',
+            'rust': 'Rust',
+            'scss': 'Scss',
+            'ini': 'INI',
+            'typescript': 'Typescript',
+            'yaml': 'Yaml',
+            'arduino': 'Arduino',
+            'basic': 'Basic',
+            'dos': 'Dos',
+            'dockerfile': 'Dockerfile',
+            'powershell': 'Powershell',
+        }
+    };
+
     var sceController = (function ($) {
         var _sourceButton,
             _sourceButtonAvailable,
@@ -283,6 +325,7 @@
                     toolbar: <!-- IF S_QUICK_REPLY --> '{EDITOR_QUICK_TOOLBAR}' <!-- ELSE --> '{EDITOR_NORMAL_TOOLBAR}' <!-- ENDIF -->,
                     emoticonsRoot: '{U_EMOTICONS_ROOT}',
                     emoticons: { dropdown: sceEmoticonsBBcode },
+                    code: sceCodeBBcode,
                     style: '" /><style type="text/css">' + _cssString + '</style><link rel="stylesheet" type="text/css" href="{U_CSS_FIXES}?assets_version={T_ASSETS_VERSION}',
                 });
 

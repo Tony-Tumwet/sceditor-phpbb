@@ -13,32 +13,34 @@ function sce_is(node, selector) {
 
 function sce_on(node, events, selector, fn, capture) {
 	events.split(' ').forEach(function (event) {
+		function isTypeof(type, arg) {
+			return typeof arg === type;
+		}
+
+		var isString = isTypeof.bind(null, 'string');
 		var handler;
 
-		handler = fn['_sce-event-' + event + selector] || function (e) {
-			var target = e.target;
-			while (target && target !== node) {
-				if (sce_is(target, selector)) {
-					fn.call(target, e);
-					return;
+		if (isString(selector)) {
+			handler = fn['_sce-event-' + event + selector] || function (e) {
+				var target = e.target;
+				while (target && target !== node) {
+					if (sce_is(target, selector)) {
+						fn.call(target, e);
+						return;
+					}
+
+					target = target.parentNode;
 				}
+			};
 
-				target = target.parentNode;
-			}
-		};
+			fn['_sce-event-' + event + selector] = handler;
+		} else {
+			handler = selector;
+			capture = fn;
+		}
 
-		fn['_sce-event-' + event + selector] = handler;
 		node.addEventListener(event, handler, capture || false);
 	});
-}
-
-function sce_locale(text) {
-	if (sceditor && sceditor.defaultOptions.locale) {
-		var test = sceditor.locale[ sceditor.defaultOptions.locale ][ text ];
-		return test ? test : text;
-	}
-
-	return text;
 }
 
 
@@ -60,9 +62,9 @@ sceditor.formats.bbcode.set('img', {
 sceditor.command.set('image', {
 	_dropDown: function (editor, caller, selected, cb) {
 		var child = document.createElement('div');
-		child.innerHTML = '<div><label for="link">' + sce_locale('URL:') + '</label> ' +
+		child.innerHTML = '<div><label for="link">' + editor._('URL:') + '</label> ' +
 			'<input type="text" id="image" dir="ltr" placeholder="https://" /></div>' +
-			'<div><input type="button" class="button" value="' + sce_locale('Insert') + '" />' +
+			'<div><input type="button" class="button" value="' + editor._('Insert') + '" />' +
 			'</div>';
 
 		var content = document.createElement('div');
@@ -205,65 +207,55 @@ sceditor.command.set('size', {
 
 sceditor.command.set('code2', {
 	_dropDown: function (editor, caller, callback) {
-		// ver de implementar lo de "more" para acortar el desplegable
-		var languages = {
-			'bash': 'Bash',
-			'cs': 'C#',
-			'cpp': 'C/C++',
-			'css': 'CSS',
-			'diff': 'Diff',
-			'go': 'Go',
-			'xml': 'Xml',
-			'http': 'Http',
-			'json': 'JSON',
-			'java': 'Java',
-			'javascript': 'Javascript',
-			'less': 'Less',
-			'lua': 'Lua',
-			'makefile': 'Makefile',
-			'markdown': 'Markdown',
-			'nginx': 'Nginx',
-			'php': 'Php',
-			'python': 'Python',
-			'ruby': 'Ruby',
-			'rust': 'Rust',
-			'scss': 'Scss',
-			'sql': 'SQL',
-			'shell': 'Shell',
-			'ini': 'Ini',
-			'typescript': 'Typescript',
-			'yaml': 'Yaml',
-			'arduino': 'Arduino',
-			'autoit': 'Autoit',
-			'basic': 'Basic',
-			'dos': 'Dos',
-			'delphi': 'Delphi',
-			'dockerfile': 'Dockerfile',
-			'powershell': 'Powershell',
-			'vbnet': 'VB .NET',
-			'vbscript': 'VB Script',
-		};
-		var content = document.createElement('div');
+		var createContent = function (includeMore) {
+			var content = document.createElement('div');
+			var opts = editor.opts;
+			var languageList = sceditor.utils.extend(
+				{},
+				opts.code.dropdown,
+				includeMore ? opts.code.more : {}
+			);
 
-		sce_on(content, 'click', 'a', function (e) {
-			callback($(this).data('code'));
-			editor.closeDropDown(true);
-			e.preventDefault();
-		});
+			sce_on(content, 'click', 'a', function (e) {
+				callback($(this).data('code'));
+				editor.closeDropDown(true);
+				e.preventDefault();
+			});
 
-		for (var label in languages) {
-			var tmp = document.createElement('div');
-			tmp.innerHTML = '<a class="sceditor-fontsize-option" data-code="' + label + '" href="#">' + languages[ label ] + '</a>';
+			sceditor.utils.each(languageList, function (code, label) {
+				var tmp = document.createElement('div');
+				tmp.innerHTML = '<a class="sceditor-fontsize-option" data-code="' + code + '" href="#">' + label + '</a>';
 
-			var	ret = document.createDocumentFragment();
-			while (tmp.firstChild) {
-				ret.appendChild(tmp.firstChild);
+				var	ret = document.createDocumentFragment();
+				while (tmp.firstChild) {
+					ret.appendChild(tmp.firstChild);
+				}
+
+				content.appendChild(ret);
+			});
+
+			if (!includeMore) {
+				var moreLink = document.createElement('a', {
+					className: 'sceditor-more'
+				});
+
+				moreLink.appendChild(document.createTextNode(editor._('More')));
+
+				sce_on(moreLink, 'click', function (e) {
+					editor.createDropDown(
+						caller, 'more-code-picker', createContent(true)
+					);
+
+					e.preventDefault();
+				});
+
+				content.appendChild(moreLink);
 			}
 
-			content.appendChild(ret);
-		}
+			return content;
+		};
 
-		editor.createDropDown(caller, 'code-picker', content);
+		editor.createDropDown(caller, 'code-picker', createContent(false));
 	},
 	txtExec: function (caller) {
 		var editor = this;
@@ -348,9 +340,9 @@ sceditor.command.set('custombbcodes', {
 			e.preventDefault();
 		});
 
-		for (var bbcode in sceCustomBBcode) {
+		sceditor.utils.each(sceCustomBBcode, function (bbcode, label) {
 			var tmp = document.createElement('div');
-			tmp.innerHTML = '<a class="sceditor-fontsize-option" data-bbcode="' + bbcode + '" title="' + sceCustomBBcode[bbcode] + '" href="#">' + bbcode + '</a>';
+			tmp.innerHTML = '<a class="sceditor-fontsize-option" data-bbcode="' + bbcode + '" href="#">' + label + '</a>';
 
 			var	ret = document.createDocumentFragment();
 			while (tmp.firstChild) {
@@ -358,9 +350,9 @@ sceditor.command.set('custombbcodes', {
 			}
 
 			content.appendChild(ret);
-		}
+		});
 
-		editor.createDropDown(caller, 'custombbcodes-picker', content);
+		editor.createDropDown(caller, 'custom-bbcodes-picker', content);
 	},
 	txtExec: function (caller) {
 		var editor = this;
@@ -401,6 +393,7 @@ function setSmilie(tag) {
 
 $(function () {
 	sceController.init();
+
 	// Don't need to select the node again and again
 	textarea = sceController.getTextarea();
 	// Hide the normal BBCode Buttons
@@ -419,6 +412,7 @@ $(function () {
 		var attachId = $(this).parents('.attach-row').attr('data-attach-id'),
 			index = phpbb.plupload.getIndex(attachId),
 			textinsert = '[attachment=' + index + ']' + phpbb.plupload.data[index].real_filename + '[/attachment]';
+
 		sceditor.instance(textarea).insert(textinsert);
 	});
 });

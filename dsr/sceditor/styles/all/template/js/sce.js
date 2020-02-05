@@ -43,6 +43,21 @@ function sce_on(node, events, selector, fn, capture) {
 	});
 }
 
+function sce_createElement(tag, attributes, context) {
+	var node = (context || document).createElement(tag);
+
+	sceditor.utils.each(attributes || {}, function (key, value) {
+		if (key === 'style') {
+			node.style.cssText = value;
+		} else if (key in node) {
+			node[key] = value;
+		} else {
+			node.setAttribute(key, value);
+		}
+	});
+
+	return node;
+}
 
 
 // Fix for php 3.2.7+
@@ -208,21 +223,30 @@ sceditor.command.set('size', {
 sceditor.command.set('code2', {
 	_dropDown: function (editor, caller, callback) {
 		var createContent = function (includeMore) {
-			var content = document.createElement('div');
-			var opts = editor.opts;
+			var content		= document.createElement('div');
+			var line		= sce_createElement('div', {
+				className: 'sceditor-color-column'
+			});
+			var opts		= editor.opts;
 			var languageList = sceditor.utils.extend(
 				{},
 				opts.code.dropdown,
 				includeMore ? opts.code.more : {}
 			);
+			var perLine		= 10;
 
+			content.appendChild(line);
 			sce_on(content, 'click', 'a', function (e) {
-				callback($(this).data('code'));
-				editor.closeDropDown(true);
-				e.preventDefault();
+				var bbcode = $(this).data('code');
+				if (bbcode) {
+					callback(bbcode);
+					editor.closeDropDown(true);
+					e.preventDefault();
+				}
 			});
 
 			sceditor.utils.each(languageList, function (code, label) {
+				// parseHTML
 				var tmp = document.createElement('div');
 				tmp.innerHTML = '<a class="sceditor-fontsize-option" data-code="' + code + '" href="#">' + label + '</a>';
 
@@ -231,25 +255,28 @@ sceditor.command.set('code2', {
 					ret.appendChild(tmp.firstChild);
 				}
 
-				content.appendChild(ret);
+				line.appendChild(ret);
+				if (line.children.length >= perLine) {
+					line = sce_createElement('div', {
+						className: 'sceditor-color-column'
+					});
+					content.appendChild(line);
+				}
 			});
 
 			if (!includeMore) {
-				var moreLink = document.createElement('a', {
+				var moreLink = sce_createElement('a', {
 					className: 'sceditor-more'
 				});
 
 				moreLink.appendChild(document.createTextNode(editor._('More')));
 
 				sce_on(moreLink, 'click', function (e) {
-					editor.createDropDown(
-						caller, 'more-code-picker', createContent(true)
-					);
-
+					editor.createDropDown(caller, 'more-code-picker', createContent(true));
 					e.preventDefault();
 				});
 
-				content.appendChild(moreLink);
+				line.appendChild(moreLink);
 			}
 
 			return content;
@@ -341,8 +368,9 @@ sceditor.command.set('custombbcodes', {
 		});
 
 		sceditor.utils.each(sceCustomBBcode, function (bbcode, label) {
+			// parseHTML
 			var tmp = document.createElement('div');
-			tmp.innerHTML = '<a class="sceditor-fontsize-option" data-bbcode="' + bbcode + '" href="#">' + label + '</a>';
+			tmp.innerHTML = '<a class="sceditor-fontsize-option" data-bbcode="' + bbcode + '" title="' + label + '" href="#">' + bbcode + '</a>';
 
 			var	ret = document.createDocumentFragment();
 			while (tmp.firstChild) {

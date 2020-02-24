@@ -1,5 +1,6 @@
 <!-- IF S_SCEDITOR -->
 <!-- INCLUDEJS @dsr_sceditor/js/sceditor/jquery.sceditor.bbcode.min.js -->
+<!-- INCLUDEJS @dsr_sceditor/js/sceditor/plugins/plaintext.js -->
 <!-- INCLUDEJS @dsr_sceditor/js/sceditor/custom_autosave.js -->
 
 <!-- IF L_SCEDITOR_LANG -->
@@ -319,7 +320,11 @@
 
                 sceditor.create(_textarea, {
                     format: 'bbcode',
-                    plugins: 'autosave',
+                    plugins: 'autosave,plaintext',
+                    pastetext: {
+                        addButton: false,
+                        enabled: true
+                    },
                     icons: '{EDITOR_BUTTONS_ICONS}',
                     width: maxWidth,
                     toolbar: <!-- IF S_QUICK_REPLY --> '{EDITOR_QUICK_TOOLBAR}' <!-- ELSE --> '{EDITOR_NORMAL_TOOLBAR}' <!-- ENDIF -->,
